@@ -1,9 +1,11 @@
-import { ThemeProvider } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import React from 'react';
 import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { lightTheme } from 'src/theme';
+import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -39,7 +41,10 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          <MuiThemeProvider theme={lightTheme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </MuiThemeProvider>
         </Hydrate>
         <ReactQueryDevtools position="bottom-right" />
         {/* {isProduction ? null : <ReactQueryDevtools position="bottom-right" />} */}
