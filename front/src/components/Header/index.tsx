@@ -7,7 +7,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 2rem;
+  padding: 2rem 0;
+  color: ${(props) => props.theme.PUBLIC_BLACK};
 `;
 
 const Logo = styled.span`
@@ -24,16 +25,14 @@ const MenuContainer = styled.div`
 `;
 
 const Header = () => (
-  <Layout>
-    <Container>
-      <Logo>Reviewfolio</Logo>
-      <MenuContainer>
-        <span>요청하기</span>
-        <span>결제하기</span>
-        <span>마이페이지</span>
-      </MenuContainer>
-    </Container>
-  </Layout>
+  <Container>
+    <Logo>Reviewfolio</Logo>
+    <MenuContainer>
+      <span>요청하기</span>
+      <span>결제하기</span>
+      <span>마이페이지</span>
+    </MenuContainer>
+  </Container>
 );
 
 export default Header;

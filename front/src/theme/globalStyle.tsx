@@ -1,6 +1,7 @@
 import { Global, css } from '@emotion/react';
 import reset from 'emotion-reset';
 import React from 'react';
+import { lightTheme } from '.';
 
 const GlobalStyle = () => (
   <Global
@@ -14,18 +15,12 @@ const GlobalStyle = () => (
       body {
         overflow-x: hidden;
         width: 100%;
-        /* background-color: ${lightTheme.PUBLIC_WHITE}; */
         font-family: NanumSquare, 'Noto Sans KR', notokr, 'Nanum Gothic', 'Malgun Gothic', sans-serif;
       }
 
       a {
         text-decoration: none;
         outline: none;
-        /* color: ${lightTheme.PUBLIC_BLACK}; */
-      }
-
-      button {
-        border: 1px solid #000;
       }
     `}
   />
