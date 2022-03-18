@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Container = styled.div`
   display: flex;
@@ -18,11 +20,19 @@ const Container = styled.div`
   }
 `;
 
-const HomeCompany = () => (
-  <Container>
-    <span>유망한 회사의 선배들에게 도움을 받을 수 있습니다.</span>
-    <img src="./company.png" alt="company" />
-  </Container>
-);
+const HomeCompany = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 3000,
+    });
+  }, []);
+
+  return (
+    <Container>
+      <span data-aos="fade-up">유망한 회사의 선배들에게 도움을 받을 수 있습니다.</span>
+      <img data-aos="fade-up" src="./company.png" alt="company" />
+    </Container>
+  );
+};
 
 export default HomeCompany;

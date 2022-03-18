@@ -1,12 +1,11 @@
-import Button from '@mui/material/Button';
 import styled from '@emotion/styled';
+import Button from '@mui/material/Button';
+import { Box } from '@mui/system';
 import React from 'react';
 import Header from 'src/components/Header';
-import Layout from 'src/components/Layout';
-import { Box } from '@mui/system';
 import HomeAdvantage from 'src/components/HomeAdvantage';
-import { lightTheme } from 'src/theme';
 import HomeCompany from 'src/components/HomeCompany';
+import Layout from 'src/components/Layout';
 
 const Container = styled.div`
   width: 100%;
@@ -46,11 +45,6 @@ const InfoContainer = styled.div`
   }
 `;
 
-const Test = styled.div`
-  width: 100%;
-  background-color: black;
-`;
-
 const Home = () => (
   <>
     <Layout>
@@ -87,5 +81,4 @@ const Home = () => (
     <HomeCompany />
   </>
 );
-
 export default Home;
