@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import React from 'react';
+import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import HomeAdvantage from 'src/components/HomeAdvantage';
 import HomeCompany from 'src/components/HomeCompany';
@@ -45,6 +46,11 @@ const InfoContainer = styled.div`
   }
 `;
 
+const Hr = styled.hr`
+  color: rgba(0, 0, 0, 0.12);
+  border-width: 0px 0px thin;
+`;
+
 const Home = () => (
   <>
     <Layout>
@@ -79,6 +85,8 @@ const Home = () => (
     </Layout>
     <HomeAdvantage />
     <HomeCompany />
+    <Hr />
+    <Footer />
   </>
 );
 export default Home;
