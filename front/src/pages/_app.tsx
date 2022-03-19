@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { lightTheme } from 'src/theme';
 import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import GlobalStyle from 'src/theme/globalStyle';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [queryClient] = React.useState(() => new QueryClient());

@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import Link from 'next/link';
 import Layout from '../Layout';
 
 const Container = styled.div`
@@ -19,8 +20,22 @@ const Logo = styled.span`
 const MenuContainer = styled.div`
   font-size: 1.1rem;
 
-  span {
+  a {
+    cursor: pointer;
     margin-left: 1rem;
+    text-decoration: none;
+    outline: none;
+    color: #000;
+
+    /* &:link {
+      color: #000;
+    }
+    &:visited {
+      color: '#000';
+    }
+    &:active {
+      color: '#000';
+    } */
   }
 `;
 
@@ -28,9 +43,15 @@ const Header = () => (
   <Container>
     <Logo>Reviewfolio</Logo>
     <MenuContainer>
-      <span>요청하기</span>
-      <span>결제하기</span>
-      <span>마이페이지</span>
+      <Link href="/request">
+        <a>요청하기</a>
+      </Link>
+      <Link href="/request">
+        <a>결제하기</a>
+      </Link>
+      <Link href="/request">
+        <a>마이페이지</a>
+      </Link>
     </MenuContainer>
   </Container>
 );
