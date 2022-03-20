@@ -4,6 +4,7 @@ import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { useFormControl } from '@mui/material/FormControl';
 import { Box, Button, Stack, TextField } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const Form = styled.form`
   display: flex;
@@ -26,31 +27,35 @@ const ButtonContainer = styled.div`
   margin-top: 2rem;
 `;
 
-const Request = () => (
-  <Layout>
-    <Header />
-    <Form>
-      <Stack spacing={4}>
-        <TextField id="standard-basic" label="title" variant="standard" />
-        <TextField id="outlined-multiline-static" label="content" multiline rows={15} defaultValue="Default V" />
-        <FileContaer>
-          <input type="file" multiple />
-        </FileContaer>
-      </Stack>
-      <ButtonContainer>
-        <Box mr={1}>
-          <Button size="large" variant="contained">
-            작성
-          </Button>
-        </Box>
-        <Box mr={1}>
-          <Button size="large" variant="outlined">
-            취소
-          </Button>
-        </Box>
-      </ButtonContainer>
-    </Form>
-  </Layout>
-);
+const Request = () => {
+  const router = useRouter();
+
+  return (
+    <Layout>
+      <Header />
+      <Form>
+        <Stack spacing={4}>
+          <TextField id="standard-basic" label="title" variant="standard" />
+          <TextField id="outlined-multiline-static" label="content" multiline rows={15} defaultValue="Default V" />
+          <FileContaer>
+            <input type="file" multiple />
+          </FileContaer>
+        </Stack>
+        <ButtonContainer>
+          <Box mr={1}>
+            <Button size="large" variant="contained">
+              작성
+            </Button>
+          </Box>
+          <Box mr={1}>
+            <Button onClick={() => router.back()} size="large" variant="outlined">
+              취소
+            </Button>
+          </Box>
+        </ButtonContainer>
+      </Form>
+    </Layout>
+  );
+};
 
 export default Request;
