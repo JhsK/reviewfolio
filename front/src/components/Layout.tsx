@@ -11,7 +11,7 @@ const Container = styled.div<LayoutContainer>`
   background-color: ${(props) => props.color};
 `;
 
-const SubContainer = styled.div`
+export const SubContainer = styled.div`
   max-width: 1200px;
   width: 100%;
   margin-left: auto;

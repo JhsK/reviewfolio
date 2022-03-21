@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
+import { useRouter } from 'next/router';
 import React from 'react';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import HomeAdvantage from 'src/components/HomeAdvantage';
 import HomeCompany from 'src/components/HomeCompany';
 import Layout from 'src/components/Layout';
+import { Hr } from 'src/components/style';
 
 const Container = styled.div`
   width: 100%;
@@ -46,47 +48,46 @@ const InfoContainer = styled.div`
   }
 `;
 
-const Hr = styled.hr`
-  color: rgba(0, 0, 0, 0.12);
-  border-width: 0px 0px thin;
-`;
+const Home = () => {
+  const router = useRouter();
 
-const Home = () => (
-  <>
-    <Layout>
-      <Header />
-      <Container>
-        <div className="mainFlex">
-          <InfoContainer>
-            <div className="title">
-              <span>나의 포트폴리오 &#x000B7; 이력서를</span>
-              <br />
-              <span>첨삭받을 수 있는 기회</span>
-            </div>
-            <div className="subTitle">
-              <span>지금 회원가입시 무료로 첨삭받을 수 있는</span>
-              <br />
-              <span>티켓 1장을 드립니다</span>
-            </div>
-            <div className="btnContainer">
-              <Box mr={1}>
-                <Button size="large" variant="contained">
-                  회원가입
+  return (
+    <>
+      <Layout>
+        <Header />
+        <Container>
+          <div className="mainFlex">
+            <InfoContainer>
+              <div className="title">
+                <span>나의 포트폴리오 &#x000B7; 이력서를</span>
+                <br />
+                <span>첨삭받을 수 있는 기회</span>
+              </div>
+              <div className="subTitle">
+                <span>지금 회원가입시 무료로 첨삭받을 수 있는</span>
+                <br />
+                <span>티켓 1장을 드립니다</span>
+              </div>
+              <div className="btnContainer">
+                <Box mr={1}>
+                  <Button size="large" onClick={() => router.push('/user/sign_up')} variant="contained">
+                    회원가입
+                  </Button>
+                </Box>
+                <Button size="large" onClick={() => router.push('/user/sign_in')} variant="outlined">
+                  로그인
                 </Button>
-              </Box>
-              <Button size="large" variant="outlined">
-                로그인
-              </Button>
-            </div>
-          </InfoContainer>
-          <img src="./image2-removebg-preview.png" alt="info" />
-        </div>
-      </Container>
-    </Layout>
-    <HomeAdvantage />
-    <HomeCompany />
-    <Hr />
-    <Footer />
-  </>
-);
+              </div>
+            </InfoContainer>
+            <img src="./image2-removebg-preview.png" alt="info" />
+          </div>
+        </Container>
+      </Layout>
+      <HomeAdvantage />
+      <HomeCompany />
+      <Hr />
+      <Footer />
+    </>
+  );
+};
 export default Home;

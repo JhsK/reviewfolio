@@ -10,6 +10,13 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 2rem 0;
   color: ${(props) => props.theme.PUBLIC_BLACK};
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    color: #000;
+  }
 `;
 
 const Logo = styled.span`
@@ -21,27 +28,17 @@ const MenuContainer = styled.div`
   font-size: 1.1rem;
 
   a {
-    cursor: pointer;
     margin-left: 1rem;
-    text-decoration: none;
-    outline: none;
-    color: #000;
-
-    /* &:link {
-      color: #000;
-    }
-    &:visited {
-      color: '#000';
-    }
-    &:active {
-      color: '#000';
-    } */
   }
 `;
 
 const Header = () => (
   <Container>
-    <Logo>Reviewfolio</Logo>
+    <Logo>
+      <Link href="/">
+        <a>Reviewfolio</a>
+      </Link>
+    </Logo>
     <MenuContainer>
       <Link href="/request">
         <a>요청하기</a>
