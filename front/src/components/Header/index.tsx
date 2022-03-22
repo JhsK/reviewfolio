@@ -43,10 +43,10 @@ const Header = () => (
       <Link href="/request">
         <a>요청하기</a>
       </Link>
-      <Link href="/request">
+      <Link href="/payment">
         <a>결제하기</a>
       </Link>
-      <Link href="/request">
+      <Link href="/user/mypage">
         <a>마이페이지</a>
       </Link>
     </MenuContainer>

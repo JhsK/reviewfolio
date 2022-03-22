@@ -1,29 +1,16 @@
 import styled from '@emotion/styled';
+import { FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material';
 import React, { useState } from 'react';
-import Header from 'src/components/Header';
-import Layout, { SubContainer } from 'src/components/Layout';
-import { Radio, RadioGroup, FormControlLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import Footer from 'src/components/Footer';
 import { useForm } from 'react-hook-form';
-import { Hr } from 'src/components/style';
+import Footer from 'src/components/Footer';
+import Header from 'src/components/Header';
+import Layout from 'src/components/Layout';
+import { Banner, Hr } from 'src/components/style';
 
 const BannerContainer = styled.div`
   width: 100%;
   height: 250px;
   background-color: #e4f7fd;
-`;
-
-const Banner = styled(SubContainer)`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  font-weight: bold;
-
-  h1 {
-    margin: 0 0 1rem 0;
-    font-size: 2.5rem;
-  }
 `;
 
 const Form = styled.form`
