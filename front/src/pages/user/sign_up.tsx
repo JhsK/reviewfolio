@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
-import { Banner, Hr } from 'src/components/style';
+import { Banner, Hr, Input } from 'src/components/style';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -62,16 +62,6 @@ const Form = styled.form`
       }
     }
   }
-`;
-
-const Input = styled.input`
-  width: 40%;
-  height: 50px;
-  border-radius: 1.2rem;
-  border: 1px solid rgb(222, 226, 230);
-  outline: none;
-  padding: 0 1rem;
-  font-size: 1rem;
 `;
 
 const validationMessage = {

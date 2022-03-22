@@ -18,3 +18,13 @@ export const Banner = styled(SubContainer)`
     font-size: 2.5rem;
   }
 `;
+
+export const Input = styled.input`
+  width: 40%;
+  height: 50px;
+  border-radius: 1.2rem;
+  border: 1px solid rgb(222, 226, 230);
+  outline: none;
+  padding: 0 1rem;
+  font-size: 1rem;
+`;
