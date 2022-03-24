@@ -1,11 +1,15 @@
 import styled from '@emotion/styled';
 import { FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { Banner, Hr, Input } from 'src/components/style';
+import { FormInput, JoinInput } from 'src/types';
 
 const BannerContainer = styled.div`
   width: 100%;
@@ -29,8 +33,16 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
 
-    span {
-      font-size: 1.2rem;
+    .radio {
+      span {
+        font-size: 1.2rem;
+      }
+    }
+
+    .error {
+      padding-top: 0.5rem;
+      font-size: 0.9rem;
+      color: red;
     }
 
     label {
@@ -42,6 +54,7 @@ const Form = styled.form`
     margin-top: 2rem;
 
     button {
+      cursor: pointer;
       width: 150px;
       margin-right: 1rem;
       outline: none;
@@ -49,13 +62,13 @@ const Form = styled.form`
       padding: 1rem 0;
       border-radius: 1.2rem;
 
-      &:nth-child(1) {
+      &:nth-of-type(1) {
         color: #fff;
         background-color: #1976d3;
         border: none;
       }
 
-      &:nth-child(2) {
+      &:nth-of-type(2) {
         border: 1px solid #1976d3;
         color: #1976d3;
         background-color: #fff;
@@ -75,13 +88,36 @@ const SignUp = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormInput>();
+  const router = useRouter();
   const [selectJob, setSelectJob] = useState('직무를 선택해주세요');
+  const [position, setPosition] = useState('student');
 
   const onChangeJob = (e: SelectChangeEvent) => {
-    console.log(e.target.value);
     setSelectJob(e.target.value);
+  };
+
+  const onSubmit: SubmitHandler<FormInput> = (data: FormInput) => {
+    console.log(data);
+    if (selectJob === '직무를 선택해주세요') {
+      return toast.error('🦄 Wow so easy!', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+    if (data.userPassword !== data.rePassword) {
+      setError('userPassword', { message: validationMessage.passwordConfirmation }, { shouldFocus: true });
+    }
+
+    const values: JoinInput = { ...data, selectJob, position };
+    return '';
   };
 
   return (
@@ -89,6 +125,7 @@ const SignUp = () => {
       <Layout>
         <Header />
       </Layout>
+      <ToastContainer />
       <BannerContainer>
         <Banner>
           <h1>회원가입</h1>
@@ -96,13 +133,21 @@ const SignUp = () => {
         </Banner>
       </BannerContainer>
       <Layout>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <span className="title">개인 정보</span>
           <div className="article">
-            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group">
-              <FormControlLabel value="student" control={<Radio size="small" />} label="취업준비생" />
-              <FormControlLabel value="programmer" control={<Radio size="small" />} label="개발자" />
-            </RadioGroup>
+            <div className="radio">
+              <RadioGroup
+                onChange={(event) => setPosition(event.target.value)}
+                row
+                defaultValue={position}
+                aria-labelledby="demo-row-radio-buttons-group-label"
+                name="row-radio-buttons-group"
+              >
+                <FormControlLabel value="student" control={<Radio size="small" />} label="취업준비생" />
+                <FormControlLabel value="programmer" control={<Radio size="small" />} label="개발자" />
+              </RadioGroup>
+            </div>
           </div>
           <div className="article">
             <label htmlFor="userName">이름</label>
@@ -112,7 +157,7 @@ const SignUp = () => {
               name="userName"
               id="userName"
             />
-            <span>{errors?.userName?.message}</span>
+            <span className="error">{errors?.userName?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="userId">아이디</label>
@@ -122,22 +167,27 @@ const SignUp = () => {
               name="userId"
               id="userId"
             />
-            <span>{errors?.userId?.message}</span>
+            <span className="error">{errors?.userId?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="userPassword">비밀번호</label>
             <Input
-              {...register('password', { required: validationMessage.required })}
+              {...register('userPassword', { required: validationMessage.required })}
               type="password"
               name="userPassword"
               id="userPassword"
             />
-            <span>{errors?.userPassword?.message}</span>
+            <span className="error">{errors?.userPassword?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="rePassword">비밀번호 확인</label>
-            <Input type="password" name="rePassword" id="rePassword" />
-            <span>{errors?.rePassword?.message}</span>
+            <Input
+              type="password"
+              {...register('rePassword', { required: validationMessage.required })}
+              name="rePassword"
+              id="rePassword"
+            />
+            <span className="error">{errors?.rePassword?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="nickname">닉네임</label>
@@ -147,7 +197,7 @@ const SignUp = () => {
               name="nickname"
               id="nickname"
             />
-            <span>{errors?.nickname?.message}</span>
+            <span className="error">{errors?.nickname?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="birthday">생년월일</label>
@@ -157,7 +207,7 @@ const SignUp = () => {
               name="birthday"
               id="birthday"
             />
-            <span>{errors?.birthday?.message}</span>
+            <span className="error">{errors?.birthday?.message}</span>
           </div>
           <div className="article">
             <label htmlFor="job">직무</label>
@@ -170,24 +220,26 @@ const SignUp = () => {
               <MenuItem value="devops">DevOps</MenuItem>
             </Select>
           </div>
-          <div className="article">
-            <label htmlFor="career">년차</label>
-            <Input
-              {...register('career', {
-                required: validationMessage.required,
-                min: { value: 0, message: validationMessage.range },
-                max: { value: 20, message: validationMessage.range },
-                pattern: { value: /^[0-9]+$/, message: validationMessage.notString },
-              })}
-              type="text"
-              name="career"
-              id="career"
-            />
-            <span>{errors?.career?.message}</span>
-          </div>
+          {position === 'programmer' && (
+            <div className="article">
+              <label htmlFor="career">년차</label>
+              <Input
+                {...register('career', {
+                  required: validationMessage.required,
+                  min: { value: 0, message: validationMessage.range },
+                  max: { value: 20, message: validationMessage.range },
+                  pattern: { value: /^[0-9]+$/, message: validationMessage.notString },
+                })}
+                type="text"
+                name="career"
+                id="career"
+              />
+              <span className="error">{errors?.career?.message}</span>
+            </div>
+          )}
           <div className="btnContainer">
-            <button>회원가입</button>
-            <button>홈으로</button>
+            <button type="submit">회원가입</button>
+            <button onClick={() => router.push('/')}>홈으로</button>
           </div>
         </Form>
       </Layout>
