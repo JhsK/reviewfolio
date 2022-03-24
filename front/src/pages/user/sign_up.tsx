@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { postSignUp } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
@@ -99,10 +100,10 @@ const SignUp = () => {
     setSelectJob(e.target.value);
   };
 
-  const onSubmit: SubmitHandler<FormInput> = (data: FormInput) => {
+  const onSubmit: SubmitHandler<FormInput> = async (data: FormInput) => {
     console.log(data);
     if (selectJob === '직무를 선택해주세요') {
-      return toast.error('🦄 Wow so easy!', {
+      return toast.error('직무를 선택해주세요', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
@@ -116,8 +117,16 @@ const SignUp = () => {
       setError('userPassword', { message: validationMessage.passwordConfirmation }, { shouldFocus: true });
     }
 
-    const values: JoinInput = { ...data, selectJob, position };
-    return '';
+    const values: JoinInput = { ...data, job: selectJob, position };
+
+    try {
+      await postSignUp(values);
+      router.replace('/');
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
   };
 
   return (

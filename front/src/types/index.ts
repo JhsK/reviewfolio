@@ -10,7 +10,12 @@ export interface FormInput {
 
 export interface JoinInput extends FormInput {
   // selectJob: '직무를 선택해주세요' | 'front' | 'back' | 'data' | 'android' | 'ios' | 'devops';
-  selectJob: string;
+  job: string;
   // position: 'student' | 'programmer';
   position: string;
+}
+
+export interface LoginInput {
+  userId: string;
+  password: string;
 }

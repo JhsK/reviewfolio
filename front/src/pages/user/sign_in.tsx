@@ -5,7 +5,10 @@ import Header from 'src/components/Header';
 import { Hr, Input } from 'src/components/style';
 import { Box, Button } from '@mui/material';
 import Footer from 'src/components/Footer';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { LoginInput } from 'src/types';
+import { postSignIn } from 'src/api';
+import { useRouter } from 'next/router';
 
 const Container = styled.div`
   width: 100%;
@@ -22,6 +25,11 @@ const Form = styled.div`
 
   .article {
     margin-bottom: 1rem;
+  }
+
+  span {
+    font-size: 0.9rem;
+    color: red;
   }
 
   label {
@@ -41,7 +49,19 @@ const SignIn = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginInput>();
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<LoginInput> = async (data: LoginInput) => {
+    console.log(data);
+
+    try {
+      await postSignIn(data);
+      router.back();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -50,7 +70,7 @@ const SignIn = () => {
       </Layout>
       <Container>
         <h1>로그인</h1>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <div className="article">
             <label htmlFor="userId">아이디</label>
             <ExtendsInput
@@ -72,7 +92,7 @@ const SignIn = () => {
             <span>{errors?.password?.message}</span>
           </div>
           <Box mt={1} mb={1}>
-            <Button fullWidth size="large" variant="contained">
+            <Button fullWidth size="large" type="submit" variant="contained">
               로그인
             </Button>
           </Box>
