@@ -12,6 +12,8 @@ class User extends Model {
   public password!: string;
   public ticket?: number;
   public position!: string;
+  public birthday!: string;
+  public job!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -45,6 +47,13 @@ User.init(
     career: {
       type: DataTypes.INTEGER,
     },
+    birthday: {
+      type: DataTypes.STRING(30),
+    },
+    job: {
+      type: DataTypes.ENUM,
+      values: ['front', 'back', 'data', 'android', 'ios', 'devops'],
+    }
   },
   {
     sequelize,

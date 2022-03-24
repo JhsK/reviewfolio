@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import express from 'express';
 import passport from 'passport';
+import Programmer from '../models/programmer';
 import User from '../models/user';
 import { isLoggedIn, isNotLoggedIn } from './middleware';
 
@@ -22,12 +23,23 @@ router.post('/', async (req, res, next) => {
     if (exUser) {
       return res.status(403).send('이미 사용 중인 아이디입니다');
     }
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await bcrypt.hash(req.body.userPassword, 10);
     const newUser = await User.create({
       nickname: req.body.nickname,
       userId: req.body.userId,
       password: hashedPassword,
+      userName: req.body.userName,
+      career: req.body.career,
+      position: req.body.position,
+      job: req.body.job,
     });
+
+    if (req.body.position === 'programmer') {
+      await Programmer.create({
+        UserId: newUser.id,
+        career: req.body.career,
+      });
+    }
     return res.status(200).json(newUser);
   } catch (err) {
     console.error(err);
