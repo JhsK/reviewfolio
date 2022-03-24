@@ -48,7 +48,8 @@ RequestPost.init({
 });
 
 export const associate = (db: dbType) => {
-
+    db.RequestPost.belongsToMany(db.Programmer, { through: 'RequestReview'});
+    db.RequestPost.belongsTo(db.User, { foreignKey: 'userId'});
 }
 
 export default RequestPost;
