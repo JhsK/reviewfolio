@@ -30,7 +30,7 @@ TicketHistory.init(
 );
 
 export const associate = (db: dbType) => {
-  db.TicketHistory.belongsTo(db.User, { foreignKey: 'userId' });
+  db.TicketHistory.belongsTo(db.User);
 };
 
 export default TicketHistory;

@@ -26,7 +26,7 @@ Payment.init(
 );
 
 export const associate = (db: dbType) => {
-  db.Payment.belongsTo(db.User, { foreignKey: 'userId' });
+  db.Payment.belongsTo(db.User);
 };
 
 export default Payment;

@@ -33,7 +33,7 @@ Programmer.init(
 );
 
 export const associate = (db: dbType) => {
-  db.Programmer.belongsTo(db.User, { foreignKey: 'userId' });
+  db.Programmer.belongsTo(db.User);
   db.Programmer.belongsToMany(db.RequestPost, { through: 'RequestReview' });
 };
 

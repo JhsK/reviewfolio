@@ -2,6 +2,8 @@ import { DataTypes, Model } from 'sequelize';
 import { dbType } from '.';
 import sequelize from './sequelize';
 
+export interface IUser extends User {}
+
 class User extends Model {
   public readonly id!: number;
   public userName!: string;

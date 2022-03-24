@@ -6,7 +6,7 @@ import session from 'express-session';
 import morgan from 'morgan';
 import passport from 'passport';
 import { sequelize } from './models';
-
+import userRouter from './routes/user';
 
 dotenv.config();
 const app = express();
@@ -46,6 +46,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/user', userRouter);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('서버 실행 중');
