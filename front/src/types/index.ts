@@ -29,10 +29,12 @@ interface Model {
 export interface ICurrentUser extends Model {
   userId: string;
   userName: string;
-  career: number;
+  career?: number;
   birthday: null | string;
   job: string;
   nickname: string;
   position: string;
-  ticket: null | number;
+  ticket: number;
+  point?: number;
+  refundPoint?: number;
 }

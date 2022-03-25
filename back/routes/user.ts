@@ -7,9 +7,17 @@ import { isLoggedIn, isNotLoggedIn } from './middleware';
 
 const router = express.Router();
 
-router.get('/', isLoggedIn, (req, res) => {
+router.get('/', isLoggedIn, async (req, res) => {
   const user = req.user?.toJSON();
+  
+  if (user?.position === 'programmer') {
+    const programmerData = await Programmer.findOne({
+      where: { id: user.id },
+    });
+    user.career = programmerData?.career;
+  } 
   delete user.password;
+  console.log(user);
   return res.json(user);
 });
 

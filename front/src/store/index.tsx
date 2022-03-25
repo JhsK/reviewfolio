@@ -12,6 +12,8 @@ const ContextUser = createContext({
     nickname: '',
     position: '',
     ticket: null,
+    point: null,
+    refundPoint: null,
   },
   isAuthenticate: false,
   setData: (param: ICurrentUser) => {},

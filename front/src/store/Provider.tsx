@@ -23,6 +23,8 @@ const ContextProvider = (props) => {
       nickname: '',
       position: '',
       ticket: null,
+      point: null,
+      refundPoint: null,
     },
     isAuthenticate: false,
     setData,

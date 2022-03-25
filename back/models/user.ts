@@ -38,6 +38,7 @@ User.init(
     },
     ticket: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
     position: {
       type: DataTypes.STRING(30),

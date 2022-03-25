@@ -18,9 +18,11 @@ Programmer.init(
     },
     point: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
     refundPoint: {
       type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {
