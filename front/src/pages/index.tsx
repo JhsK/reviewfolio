@@ -2,13 +2,15 @@ import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { getUser } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import HomeAdvantage from 'src/components/HomeAdvantage';
 import HomeCompany from 'src/components/HomeCompany';
 import Layout from 'src/components/Layout';
 import { Hr } from 'src/components/style';
+import useAuth from 'src/hooks/useAuth';
 
 const Container = styled.div`
   width: 100%;
@@ -50,7 +52,9 @@ const InfoContainer = styled.div`
 
 const Home = () => {
   const router = useRouter();
+  const currentUser = useAuth();
 
+  console.log(currentUser);
   return (
     <>
       <Layout>

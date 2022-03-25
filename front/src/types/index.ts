@@ -19,3 +19,20 @@ export interface LoginInput {
   userId: string;
   password: string;
 }
+
+interface Model {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ICurrentUser extends Model {
+  userId: string;
+  userName: string;
+  career: number;
+  birthday: null | string;
+  job: string;
+  nickname: string;
+  position: string;
+  ticket: null | number;
+}

@@ -7,6 +7,7 @@ import { lightTheme } from 'src/theme';
 import { ThemeProvider as MuiThemeProvider } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyle from 'src/theme/globalStyle';
+import ContextProvider from 'src/store/Provider';
 
 const App = ({ Component, pageProps }: AppProps) => {
   const [queryClient] = React.useState(() => new QueryClient());
@@ -42,10 +43,12 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <MuiThemeProvider theme={lightTheme}>
-            <CssBaseline />
-            <Component {...pageProps} />
-          </MuiThemeProvider>
+          <ContextProvider>
+            <MuiThemeProvider theme={lightTheme}>
+              <CssBaseline />
+              <Component {...pageProps} />
+            </MuiThemeProvider>
+          </ContextProvider>
         </Hydrate>
         <ReactQueryDevtools position="bottom-right" />
         {/* {isProduction ? null : <ReactQueryDevtools position="bottom-right" />} */}

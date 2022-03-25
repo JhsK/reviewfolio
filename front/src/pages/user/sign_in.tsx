@@ -19,7 +19,7 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
 
@@ -30,6 +30,8 @@ const Form = styled.div`
   span {
     font-size: 0.9rem;
     color: red;
+    display: block;
+    padding-top: 0.5rem;
   }
 
   label {
@@ -53,8 +55,6 @@ const SignIn = () => {
   const router = useRouter();
 
   const onSubmit: SubmitHandler<LoginInput> = async (data: LoginInput) => {
-    console.log(data);
-
     try {
       await postSignIn(data);
       router.back();
@@ -86,8 +86,8 @@ const SignIn = () => {
             <ExtendsInput
               {...register('password', { required: '필수 항목입니다' })}
               type="password"
-              name="passowrd"
-              id="passowrd"
+              name="password"
+              id="password"
             />
             <span>{errors?.password?.message}</span>
           </div>
