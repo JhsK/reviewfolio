@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
-import { getUser } from 'src/api';
+import React from 'react';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import HomeAdvantage from 'src/components/HomeAdvantage';
@@ -72,16 +71,27 @@ const Home = () => {
                 <br />
                 <span>티켓 1장을 드립니다</span>
               </div>
-              <div className="btnContainer">
-                <Box mr={1}>
-                  <Button size="large" onClick={() => router.push('/user/sign_up')} variant="contained">
-                    회원가입
+              {!currentUser.isAuthenticate && (
+                <div className="btnContainer">
+                  <Box mr={1}>
+                    <Button size="large" onClick={() => router.push('/user/sign_up')} variant="contained">
+                      회원가입
+                    </Button>
+                  </Box>
+                  <Button size="large" onClick={() => router.push('/user/sign_in')} variant="outlined">
+                    로그인
                   </Button>
-                </Box>
-                <Button size="large" onClick={() => router.push('/user/sign_in')} variant="outlined">
-                  로그인
+                </div>
+              )}
+              {currentUser.isAuthenticate && currentUser.data.position === 'programmer' ? (
+                <Button size="large" onClick={() => router.push('/list')} variant="contained">
+                  신청하기
                 </Button>
-              </div>
+              ) : (
+                <Button size="large" onClick={() => router.push('/request')} variant="contained">
+                  요청하기
+                </Button>
+              )}
             </InfoContainer>
             <img src="./image2-removebg-preview.png" alt="info" />
           </div>

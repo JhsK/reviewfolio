@@ -22,19 +22,25 @@ export interface LoginInput {
 
 interface Model {
   id: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ICurrentUser extends Model {
   userId: string;
   userName: string;
   career?: number;
-  birthday: null | string;
+  birthday: string;
   job: string;
   nickname: string;
   position: string;
   ticket: number;
   point?: number;
   refundPoint?: number;
+}
+
+export interface IContextUser {
+  data: ICurrentUser;
+  isAuthenticate: boolean;
+  setData: (param: ICurrentUser) => void;
 }

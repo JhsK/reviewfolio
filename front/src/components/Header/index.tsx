@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import useAuth from 'src/hooks/useAuth';
+import { toast, ToastContainer } from 'react-toastify';
 import Layout from '../Layout';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Container = styled.div`
   width: 100%;
@@ -32,25 +35,59 @@ const MenuContainer = styled.div`
   }
 `;
 
-const Header = () => (
-  <Container>
-    <Logo>
-      <Link href="/">
-        <a>Reviewfolio</a>
-      </Link>
-    </Logo>
-    <MenuContainer>
-      <Link href="/request">
-        <a>요청하기</a>
-      </Link>
-      <Link href="/payment">
-        <a>결제하기</a>
-      </Link>
-      <Link href="/user/mypage">
-        <a>마이페이지</a>
-      </Link>
-    </MenuContainer>
-  </Container>
-);
+const Header = () => {
+  const currentUser = useAuth();
+
+  const NotLoggedInClick = () =>
+    toast.warn('로그인이 필요합니다', {
+      position: 'top-right',
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  return (
+    <>
+      <ToastContainer />
+      <Container>
+        <Logo>
+          <Link href="/">
+            <a>Reviewfolio</a>
+          </Link>
+        </Logo>
+        <MenuContainer>
+          {currentUser.isAuthenticate ? (
+            <>
+              {currentUser.data.position === 'programmer' ? (
+                <Link href="/list">
+                  <a>신청하기</a>
+                </Link>
+              ) : (
+                <Link href="/request">
+                  <a>요청하기</a>
+                </Link>
+              )}
+              <Link href="/payment">
+                <a>결제하기</a>
+              </Link>
+              <Link href="/user/mypage">
+                <a>마이페이지</a>
+              </Link>
+            </>
+          ) : (
+            <>
+              <a onClick={NotLoggedInClick}>요청하기</a>
+              <a onClick={NotLoggedInClick}>결제하기</a>
+              <a onClick={NotLoggedInClick}>마이페이지</a>
+            </>
+          )}
+        </MenuContainer>
+      </Container>
+    </>
+  );
+};
 
 export default Header;

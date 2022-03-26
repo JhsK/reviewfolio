@@ -3,17 +3,17 @@ import { ICurrentUser } from 'src/types';
 
 const ContextUser = createContext({
   data: {
-    id: null,
+    id: 0,
     userId: '',
     userName: '',
     birthday: '',
-    career: null,
+    career: 0,
     job: '',
     nickname: '',
     position: '',
-    ticket: null,
-    point: null,
-    refundPoint: null,
+    ticket: 0,
+    point: 0,
+    refundPoint: 0,
   },
   isAuthenticate: false,
   setData: (param: ICurrentUser) => {},
