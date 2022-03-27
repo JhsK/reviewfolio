@@ -1,5 +1,6 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, Model } from 'sequelize';
 import { dbType } from '.';
+import File from './file';
 import sequelize from './sequelize';
 
 enum RequestStatus {
@@ -16,6 +17,9 @@ class RequestPost extends Model {
   public status?: RequestStatus;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public addFiles!: HasManyAddAssociationsMixin<File, number>
+  public addFile!: HasManyAddAssociationMixin<File, number>
 }
 
 RequestPost.init(

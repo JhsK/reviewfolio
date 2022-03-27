@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
+import File from '../models/file';
 import RequestPost from '../models/requestPost';
 import { isLoggedIn } from './middleware';
 
@@ -19,7 +20,8 @@ const upload = multer({
     destination(req, file, done) {
       done(null, 'uploads');
     },
-    filename(req, file, done) { // 제로초.png
+    filename(req, file, done) {
+      // 제로초.png
       const ext = path.extname(file.originalname); // 확장자 추출(.png)
       const basename = path.basename(file.originalname, ext); // 제로초
       done(null, basename + '_' + new Date().getTime() + ext); // 제로초15184712891.png
@@ -36,6 +38,18 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
       UserId: req.user!.id,
     });
 
+    if (req.body.files) {
+      if (Array.isArray(req.body.files)) {
+        const createFile = await Promise.all(
+          req.body.files.map((uploadFile: string) => File.create({ src: uploadFile })),
+        );
+        await newPost.addFiles(createFile);
+      } else {
+        const createFile = await File.create({ src: req.body.image });
+        await newPost.addFile(createFile);
+      }
+    }
+
     return res.json(newPost);
   } catch (err) {
     console.error(err);
@@ -43,7 +57,8 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   }
 });
 
-router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => { // POST /post/images
+router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => {
+  // POST /post/images
   console.log(req.files);
   res.json((req.files as Express.Multer.File[]).map((v) => v.filename));
 });

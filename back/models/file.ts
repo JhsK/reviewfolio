@@ -13,7 +13,6 @@ File.init(
   {
     src: {
       type: DataTypes.TEXT,
-      allowNull: false,
     },
   },
   {

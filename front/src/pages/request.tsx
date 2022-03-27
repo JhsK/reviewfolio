@@ -6,6 +6,7 @@ import { Box, Button, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { IoCloseCircleSharp } from 'react-icons/io5';
 import { postFilesUpload, postRequestCreate } from 'src/api';
 
 interface IFileContainer {
@@ -44,6 +45,7 @@ const FileContaer = styled.div<IFileContainer>`
   }
 
   .fileList {
+    position: relative;
     width: 200px;
     height: 160px;
     border: 2px solid rgba(0, 0, 0, 0.2);
@@ -53,6 +55,13 @@ const FileContaer = styled.div<IFileContainer>`
     align-items: center;
     justify-content: center;
     padding: 0 1rem;
+
+    .deleteIcon {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -70,16 +79,23 @@ const Request = () => {
     formState: { errors },
   } = useForm();
   const [fileList, setFileList] = useState([]);
+  const [filePath, setFilePath] = useState<string[]>(null);
   const router = useRouter();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    const values = { ...data, files: filePath };
+
     try {
-      await postRequestCreate(data);
+      await postRequestCreate(values);
       router.push('/');
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const onClickDeleteFile = (fileName: string) => {
+    console.log(fileName);
+    setFileList((prev) => prev.filter((v) => v !== fileName));
   };
 
   const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,8 +106,9 @@ const Request = () => {
     fileObj.forEach((file, i) => formData.append(`files`, file));
 
     try {
-      await postFilesUpload(formData);
+      const returnPath = await postFilesUpload(formData);
       fileObj.forEach((file) => setFileList((prev) => [...prev, file.name]));
+      setFilePath(returnPath);
     } catch (error) {
       console.error(error);
     }
@@ -124,8 +141,11 @@ const Request = () => {
             </div>
             <input ref={fileRef} onChange={fileUpload} type="file" multiple />
             {fileList.length > 0 &&
-              fileList.map((file) => (
+              fileList.map((file: string) => (
                 <div key={file} className="fileList">
+                  <div className="deleteIcon" onClick={() => onClickDeleteFile(file)}>
+                    <IoCloseCircleSharp size="1.2rem" />
+                  </div>
                   <span key={file}>{file}</span>
                 </div>
               ))}
