@@ -5,7 +5,7 @@ import ContextUser from 'src/store';
 import { IContextUser } from 'src/types';
 
 const useAuth = () => {
-  const currentUser = useContext<IContextUser>(ContextUser);
+  const currentUser = useContext(ContextUser);
 
   useEffect(() => {
     const fetchData = async () => {

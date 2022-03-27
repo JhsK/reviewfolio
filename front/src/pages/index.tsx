@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { postLogout } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import HomeAdvantage from 'src/components/HomeAdvantage';
@@ -53,6 +54,15 @@ const Home = () => {
   const router = useRouter();
   const currentUser = useAuth();
 
+  const onClickLogout = async () => {
+    try {
+      await postLogout();
+      router.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   console.log(currentUser);
   return (
     <>
@@ -83,13 +93,9 @@ const Home = () => {
                   </Button>
                 </div>
               )}
-              {currentUser.isAuthenticate && currentUser.data.position === 'programmer' ? (
-                <Button size="large" onClick={() => router.push('/list')} variant="contained">
-                  신청하기
-                </Button>
-              ) : (
-                <Button size="large" onClick={() => router.push('/request')} variant="contained">
-                  요청하기
+              {currentUser.isAuthenticate && (
+                <Button size="large" onClick={onClickLogout} variant="contained">
+                  로그아웃
                 </Button>
               )}
             </InfoContainer>

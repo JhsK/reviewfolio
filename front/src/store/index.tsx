@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { ICurrentUser } from 'src/types';
+import { IContextUser, ICurrentUser } from 'src/types';
 
-const ContextUser = createContext({
+const ContextUser = createContext<IContextUser>({
   data: {
     id: 0,
     userId: '',

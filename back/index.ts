@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import passport from 'passport';
 import { sequelize } from './models';
 import passportConfig from './passport';
+import postRouter from './routes/post';
 import userRouter from './routes/user';
 
 dotenv.config();
@@ -49,6 +50,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/user', userRouter);
+app.use('/post', postRouter);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('서버 실행 중');

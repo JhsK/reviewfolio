@@ -6,6 +6,7 @@ import { Box, Button, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { postRequestCreate } from 'src/api';
 
 interface IFileContainer {
   isInputProp: boolean;
@@ -71,8 +72,14 @@ const Request = () => {
   const [fileList, setFileList] = useState([]);
   const router = useRouter();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      await postRequestCreate(data);
+      router.push('/');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,12 +102,12 @@ const Request = () => {
           <span>{errors?.title?.message}</span>
           <TextField
             id="outlined-multiline-static"
-            {...register('content', { required: '필수 항목입니다' })}
+            {...register('body', { required: '필수 항목입니다' })}
             label="설명"
             multiline
             rows={15}
           />
-          <span>{errors?.content?.message}</span>
+          <span>{errors?.body?.message}</span>
           <FileContaer isInputProp={fileList.length > 0}>
             <div className="fileInfo" onClick={() => fileRef.current.click()}>
               <AiOutlinePlus size="2rem" />
