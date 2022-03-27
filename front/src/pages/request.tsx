@@ -6,7 +6,7 @@ import { Box, Button, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { postRequestCreate } from 'src/api';
+import { postFilesUpload, postRequestCreate } from 'src/api';
 
 interface IFileContainer {
   isInputProp: boolean;
@@ -82,10 +82,19 @@ const Request = () => {
     }
   };
 
-  const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.files);
+    const formData = new FormData();
     const fileObj = Array.from(e.target.files);
-    fileObj.map((file) => setFileList((prev) => [...prev, file.name]));
+
+    fileObj.forEach((file, i) => formData.append(`files`, file));
+
+    try {
+      await postFilesUpload(formData);
+      fileObj.forEach((file) => setFileList((prev) => [...prev, file.name]));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

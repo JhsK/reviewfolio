@@ -7,3 +7,4 @@ export const getUser = () => API.get<ICurrentUser>('/user');
 export const postLogout = () => API.post('/user/logout');
 
 export const postRequestCreate = (params) => API.post('/post', params);
+export const postFilesUpload = (params) => API.post('/post/files', params);
