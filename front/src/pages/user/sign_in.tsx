@@ -96,7 +96,7 @@ const SignIn = () => {
               로그인
             </Button>
           </Box>
-          <Button size="large" variant="outlined">
+          <Button size="large" onClick={() => router.push('/user/sign_up')} variant="outlined">
             회원가입
           </Button>
         </Form>

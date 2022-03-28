@@ -2,12 +2,14 @@ import React, { useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
-import { Box, Button, Stack, TextField } from '@mui/material';
+import { Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoCloseCircleSharp } from 'react-icons/io5';
 import { postFilesUpload, postRequestCreate } from 'src/api';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface IFileContainer {
   isInputProp: boolean;
@@ -16,6 +18,17 @@ interface IFileContainer {
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+
+  .top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .error {
+    font-size: 0.9rem;
+    color: red;
+    margin: 0;
+  }
 `;
 
 const FileContaer = styled.div<IFileContainer>`
@@ -80,9 +93,21 @@ const Request = () => {
   } = useForm();
   const [fileList, setFileList] = useState([]);
   const [filePath, setFilePath] = useState<string[]>(null);
+  const [reviewer, setReviewer] = useState<string | number>('');
   const router = useRouter();
 
   const onSubmit = async (data) => {
+    if (reviewer === '') {
+      return toast.error('리뷰어 인원을 선택해주세요', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     const values = { ...data, files: filePath };
 
     try {
@@ -91,10 +116,15 @@ const Request = () => {
     } catch (error) {
       console.error(error);
     }
+
+    return null;
+  };
+
+  const onChangeReviewer = (e: SelectChangeEvent) => {
+    setReviewer(e.target.value);
   };
 
   const onClickDeleteFile = (fileName: string) => {
-    console.log(fileName);
     setFileList((prev) => prev.filter((v) => v !== fileName));
   };
 
@@ -117,15 +147,31 @@ const Request = () => {
   return (
     <Layout>
       <Header />
+      <ToastContainer />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={4}>
-          <TextField
-            id="standard-basic"
-            {...register('title', { required: '필수 항목입니다' })}
-            label="제목"
-            variant="standard"
-          />
-          <span>{errors?.title?.message}</span>
+          <div className="top">
+            <TextField
+              sx={{ width: '70%' }}
+              id="standard-basic"
+              {...register('title', { required: '필수 항목입니다' })}
+              label="제목"
+              variant="standard"
+            />
+            <Select
+              {...register('reviewer')}
+              value={reviewer}
+              onChange={onChangeReviewer}
+              sx={{ width: '20%' }}
+              displayEmpty
+            >
+              <MenuItem value="">리뷰어 인원 설정</MenuItem>
+              <MenuItem value={1}>최대 1명</MenuItem>
+              <MenuItem value={2}>최대 2명</MenuItem>
+              <MenuItem value={3}>최대 3명</MenuItem>
+            </Select>
+          </div>
+          <span className="error">{errors?.title?.message}</span>
           <TextField
             id="outlined-multiline-static"
             {...register('body', { required: '필수 항목입니다' })}
