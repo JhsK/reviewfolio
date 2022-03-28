@@ -1,4 +1,4 @@
-import { ICurrentUser, JoinInput } from 'src/types';
+import { ICurrentUser, IRequestPost, JoinInput } from 'src/types';
 import { API } from './api.config';
 
 export const postSignUp = (params: JoinInput) => API.post('/user', params);
@@ -11,4 +11,11 @@ export const postFilesUpload = async (params: FormData) => {
   const { data } = await API.post<string[]>('/post/files', params);
   return data;
 };
-export const deleteFileUpload = (params) => API.delete('/post/file', params);
+export const getPostsList = async () => {
+  const { data } = await API.get<IRequestPost[]>('/post');
+  return data;
+};
+export const getPostDetail = async (id: string) => {
+  const { data } = await API.get<IRequestPost>(`/post/${id}`);
+  return data;
+};

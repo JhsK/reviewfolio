@@ -10,10 +10,7 @@ import { IoCloseCircleSharp } from 'react-icons/io5';
 import { postFilesUpload, postRequestCreate } from 'src/api';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
-
-interface IFileContainer {
-  isInputProp: boolean;
-}
+import { FileContainer } from 'src/components/style';
 
 const Form = styled.form`
   display: flex;
@@ -28,53 +25,6 @@ const Form = styled.form`
     font-size: 0.9rem;
     color: red;
     margin: 0;
-  }
-`;
-
-const FileContaer = styled.div<IFileContainer>`
-  width: 100%;
-  height: 200px;
-  border: 2px dashed rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: ${(props) => (props.isInputProp ? 'flex-start' : 'center')};
-
-  input {
-    display: none;
-  }
-
-  .fileInfo {
-    display: ${(props) => (props.isInputProp ? 'none' : 'flex')};
-    flex-direction: column;
-    align-items: center;
-    opacity: 0.5;
-    cursor: pointer;
-
-    span {
-      margin-top: 1rem;
-    }
-  }
-
-  .fileList {
-    position: relative;
-    width: 200px;
-    height: 160px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    margin-right: 1rem;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1rem;
-
-    .deleteIcon {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      cursor: pointer;
-    }
   }
 `;
 
@@ -180,7 +130,7 @@ const Request = () => {
             rows={15}
           />
           <span>{errors?.body?.message}</span>
-          <FileContaer isInputProp={fileList.length > 0}>
+          <FileContainer isInputProp={fileList.length > 0}>
             <div className="fileInfo" onClick={() => fileRef.current.click()}>
               <AiOutlinePlus size="2rem" />
               <span>파일을 드래그 또는 클릭하여 첨부해주세요</span>
@@ -195,7 +145,7 @@ const Request = () => {
                   <span key={file}>{file}</span>
                 </div>
               ))}
-          </FileContaer>
+          </FileContainer>
         </Stack>
         <ButtonContainer>
           <Box mr={1}>

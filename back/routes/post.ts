@@ -4,6 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import File from '../models/file';
 import RequestPost from '../models/requestPost';
+import User from '../models/user';
 import { isLoggedIn } from './middleware';
 
 const router = express.Router();
@@ -30,12 +31,37 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }, // 20MB
 });
 
+router.get('/', async (req, res, next) => {
+  try {
+    let where = {};
+
+    const posts = await RequestPost.findAll({
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'nickname', 'job'],
+        },
+        {
+          model: File,
+        },
+      ],
+      order: [['createdAt', 'DESC']], // DESC는 내림차순, ASC는 오름차순
+    });
+    console.log(posts);
+    return res.json(posts);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+});
+
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   try {
     const newPost = await RequestPost.create({
       title: req.body.title,
       body: req.body.body,
       UserId: req.user!.id,
+      maxReviewer: req.body.reviewer,
     });
 
     if (req.body.files) {
@@ -63,27 +89,23 @@ router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => {
   res.json((req.files as Express.Multer.File[]).map((v) => v.filename));
 });
 
-// router.get('/:id', async (req, res, next) => {
-//   try {
-//     const post = await Post.findOne({
-//       where: { id: req.params.id },
-//       include: [{
-//         model: User,
-//         attributes: ['id', 'nickname'],
-//       }, {
-//         model: Image,
-//       }, {
-//         model: User,
-//         as: 'Likers',
-//         attributes: ['id'],
-//       }],
-//     });
-//     return res.json(post);
-//   } catch (e) {
-//     console.error(e);
-//     return next(e);
-//   }
-// });
+router.get('/:id', async (req, res, next) => {
+  try {
+    const post = await RequestPost.findOne({
+      where: { id: req.params.id },
+      include: [{
+        model: User,
+        attributes: ['id', 'nickname', 'job'],
+      }, {
+        model: File,
+      }],
+    });
+    return res.json(post);
+  } catch (e) {
+    console.error(e);
+    return next(e);
+  }
+});
 
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
   try {

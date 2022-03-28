@@ -57,7 +57,7 @@ RequestPost.init(
 export const associate = (db: dbType) => {
   db.RequestPost.belongsToMany(db.Programmer, { through: 'RequestReview' });
   db.RequestPost.belongsTo(db.User);
-  db.RequestPost.hasMany(db.File, { as: 'Files' });
+  db.RequestPost.hasMany(db.File);
 };
 
 export default RequestPost;

@@ -44,3 +44,23 @@ export interface IContextUser {
   isAuthenticate: boolean;
   setData: (param: ICurrentUser) => void;
 }
+
+interface IAssociateUser extends Model {
+  nickname: string;
+  job: string;
+}
+
+interface IFile extends Model {
+  src: string;
+}
+
+export interface IRequestPost extends Model {
+  title: string;
+  body: string;
+  file?: any;
+  maxReviewer: number;
+  status: 'recurit' | 'ing';
+  UserId: number;
+  User: IAssociateUser;
+  Files: IFile[];
+}

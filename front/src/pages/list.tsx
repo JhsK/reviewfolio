@@ -6,6 +6,10 @@ import { IoPersonSharp } from 'react-icons/io5';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
+import { useQuery } from 'react-query';
+import { getPostsList } from 'src/api';
+import Link from 'next/link';
+import { RequestFormFooter } from 'src/components/style';
 
 const Container = styled.div`
   width: 100%;
@@ -21,6 +25,13 @@ const PostContainer = styled.div`
   padding: 1rem 1.5rem;
   opacity: 0.7;
   margin-top: 4rem;
+
+  a {
+    cursor: pointer;
+    text-decoration: none;
+    outline: none;
+    color: rgba(0, 0, 0, 0.7);
+  }
 
   &:hover {
     opacity: 1;
@@ -38,25 +49,6 @@ const PostContainer = styled.div`
       font-size: 1.3rem;
       font-weight: bold;
     }
-
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-
-      .icon {
-        display: flex;
-        align-items: center;
-
-        .type {
-          margin-right: 1rem;
-        }
-
-        span {
-          margin-left: 0.3rem;
-        }
-      }
-    }
   }
 `;
 
@@ -66,8 +58,10 @@ const FilterContainer = styled.div`
 `;
 
 const List = () => {
+  const { data } = useQuery(['posts'], getPostsList);
   const [filter, setFilter] = useState(true);
 
+  console.log(data);
   return (
     <Layout>
       <Header />
@@ -78,60 +72,27 @@ const List = () => {
             날짜순
           </Fab>
         </FilterContainer>
-        <PostContainer>
-          <div className="container">
-            <span className="title">토이 프로젝트 리뷰 신청합니다.</span>
-            <span className="body">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste ad fugiat perspiciatis dicta
-              cumque et minus minima repellendus libero optio illo ex vitae reiciendis eligendi, deleniti aliquid nulla
-              doloribus!
-            </span>
-            <div className="footer">
-              <span>작성자: 임성규</span>
-              <div className="icon">
-                <span className="type">포트폴리오</span>
-                <IoPersonSharp size="1rem" />
-                <span>x 3</span>
-              </div>
-            </div>
-          </div>
-        </PostContainer>
-        <PostContainer>
-          <div className="container">
-            <span className="title">토이 프로젝트 리뷰 신청합니다.</span>
-            <span className="body">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste ad fugiat perspiciatis dicta
-              cumque et minus minima repellendus libero optio illo ex vitae reiciendis eligendi, deleniti aliquid nulla
-              doloribus!
-            </span>
-            <div className="footer">
-              <span>작성자: 임성규</span>
-              <div className="icon">
-                <span className="type">포트폴리오</span>
-                <IoPersonSharp size="1rem" />
-                <span>x 3</span>
-              </div>
-            </div>
-          </div>
-        </PostContainer>
-        <PostContainer>
-          <div className="container">
-            <span className="title">토이 프로젝트 리뷰 신청합니다.</span>
-            <span className="body">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quisquam iste ad fugiat perspiciatis dicta
-              cumque et minus minima repellendus libero optio illo ex vitae reiciendis eligendi, deleniti aliquid nulla
-              doloribus!
-            </span>
-            <div className="footer">
-              <span>작성자: 임성규</span>
-              <div className="icon">
-                <span className="type">포트폴리오</span>
-                <IoPersonSharp size="1rem" />
-                <span>x 3</span>
-              </div>
-            </div>
-          </div>
-        </PostContainer>
+        {data &&
+          data.map((post) => (
+            <PostContainer key={post.id}>
+              <Link href={`/request/${post.id}`}>
+                <a>
+                  <div key={post.id} className="container">
+                    <span className="title">{post.title}</span>
+                    <span className="body">{post.body}</span>
+                    <RequestFormFooter>
+                      <span>{`작성자: ${post.User.nickname} - ${post.User.job.toUpperCase()}`}</span>
+                      <div className="icon">
+                        <span className="type">포트폴리오</span>
+                        <IoPersonSharp size="1rem" />
+                        <span>{`x ${post.maxReviewer}`}</span>
+                      </div>
+                    </RequestFormFooter>
+                  </div>
+                </a>
+              </Link>
+            </PostContainer>
+          ))}
       </Container>
     </Layout>
   );
