@@ -23,3 +23,5 @@ export const getUserRequest = async () => {
   const { data } = await API.get<IRequestPost[]>('/post/user/request');
   return data;
 };
+
+export const postApplication = (params) => API.post('/application', params);

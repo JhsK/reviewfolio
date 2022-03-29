@@ -37,6 +37,7 @@ export interface ICurrentUser extends Model {
   ticket: number;
   point?: number;
   refundPoint?: number;
+  programmerId?: number;
 }
 
 export interface IContextUser {
@@ -54,6 +55,11 @@ interface IFile extends Model {
   src: string;
 }
 
+interface IApplication extends Model {
+  ProgrammerId: number;
+  RequestPostId: number;
+}
+
 export interface IRequestPost extends Model {
   title: string;
   body: string;
@@ -64,4 +70,5 @@ export interface IRequestPost extends Model {
   User: IAssociateUser;
   Files: IFile[];
   type: 'portfolio' | 'resume' | 'consulting';
+  Applications: IApplication[];
 }

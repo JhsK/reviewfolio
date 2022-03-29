@@ -9,7 +9,6 @@ class Programmer extends Model {
   public refundPoint!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
 }
 
 Programmer.init(
@@ -38,6 +37,7 @@ Programmer.init(
 export const associate = (db: dbType) => {
   db.Programmer.belongsTo(db.User);
   db.Programmer.belongsToMany(db.RequestPost, { through: 'RequestReview' });
+  db.Programmer.hasMany(db.Application, { as: 'Applications' });
 };
 
 export default Programmer;

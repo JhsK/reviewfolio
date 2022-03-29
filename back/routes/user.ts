@@ -9,12 +9,12 @@ const router = express.Router();
 
 router.get('/', isLoggedIn, async (req, res) => {
   const user = req.user?.toJSON();
-  
   if (user?.position === 'programmer') {
     const programmerData = await Programmer.findOne({
-      where: { id: user.id },
+      where: { UserId: req.user?.id },
     });
     user.career = programmerData?.career;
+    user.programmerId = programmerData?.id;
   } 
   delete user.password;
   console.log(user);

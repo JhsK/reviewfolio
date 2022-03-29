@@ -26,8 +26,8 @@ class RequestPost extends Model {
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public addFiles!: HasManyAddAssociationsMixin<File, number>
-  public addFile!: HasManyAddAssociationMixin<File, number>
+  public addFiles!: HasManyAddAssociationsMixin<File, number>;
+  public addFile!: HasManyAddAssociationMixin<File, number>;
 }
 
 RequestPost.init(
@@ -55,7 +55,7 @@ RequestPost.init(
     type: {
       type: DataTypes.ENUM,
       values: ['portfolio', 'resume', 'consulting'],
-    }
+    },
   },
   {
     sequelize,
@@ -70,6 +70,7 @@ export const associate = (db: dbType) => {
   db.RequestPost.belongsToMany(db.Programmer, { through: 'RequestReview' });
   db.RequestPost.belongsTo(db.User);
   db.RequestPost.hasMany(db.File);
+  db.RequestPost.hasMany(db.Application);
 };
 
 export default RequestPost;

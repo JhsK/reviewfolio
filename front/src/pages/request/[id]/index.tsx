@@ -5,9 +5,9 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { IoPersonSharp } from 'react-icons/io5';
 import { useQuery } from 'react-query';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getPostDetail } from 'src/api';
+import { getPostDetail, postApplication } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { FileContainer, RequestFormFooter } from 'src/components/style';
@@ -72,6 +72,32 @@ const RequestDetail = () => {
   const { id } = router.query;
   const { data } = useQuery(['postDetail', id], () => getPostDetail(id as string));
 
+  const onClickApplication = async () => {
+    const overlapApplication = data.Applications.filter(
+      (application) => application.ProgrammerId === currentUser.data.programmerId,
+    );
+
+    if (overlapApplication.length > 0) {
+      return toast.error('이미 신청한 리뷰 글입니다', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+
+    try {
+      await postApplication({ id });
+    } catch (error) {
+      console.error(error);
+    }
+
+    return null;
+  };
+
   console.log(data);
   return (
     <Layout>
@@ -86,7 +112,7 @@ const RequestDetail = () => {
               <div className="icon">
                 <span className="type">{data?.type}</span>
                 <IoPersonSharp size="1rem" />
-                <span>{`x ${data?.maxReviewer}`}</span>
+                <span>{`x ${data?.maxReviewer} - ${data.Applications.length}명 신청`}</span>
               </div>
             </ExtendsRequestFormFooter>
           </div>
@@ -104,10 +130,10 @@ const RequestDetail = () => {
               ))}
           </ExtendsFileContainer>
         </Stack>
-        {currentUser.data.position === 'programmer' && (
+        {currentUser.data.position === 'programmer' && data.maxReviewer > data.Applications.length && (
           <ButtonContainer>
             <Box mr={1}>
-              <Button size="large" variant="contained">
+              <Button size="large" onClick={onClickApplication} variant="contained">
                 신청
               </Button>
             </Box>

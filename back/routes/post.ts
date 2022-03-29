@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
+import Application from '../models/application';
 import File from '../models/file';
 import RequestPost from '../models/requestPost';
 import User from '../models/user';
@@ -85,7 +86,6 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 });
 
 router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => {
-  // POST /post/images
   console.log(req.files);
   res.json((req.files as Express.Multer.File[]).map((v) => v.filename));
 });
@@ -99,6 +99,8 @@ router.get('/:id', async (req, res, next) => {
         attributes: ['id', 'nickname', 'job'],
       }, {
         model: File,
+      }, {
+        model: Application,
       }],
     });
     return res.json(post);
