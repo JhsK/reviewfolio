@@ -19,3 +19,7 @@ export const getPostDetail = async (id: string) => {
   const { data } = await API.get<IRequestPost>(`/post/${id}`);
   return data;
 };
+export const getUserRequest = async () => {
+  const { data } = await API.get<IRequestPost[]>('/post/user/request');
+  return data;
+};

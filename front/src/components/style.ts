@@ -89,6 +89,7 @@ export const FileContainer = styled.div<IFileContainer>`
     align-items: center;
     justify-content: center;
     padding: 0 1rem;
+    overflow: auto;
 
     .deleteIcon {
       position: absolute;
@@ -97,4 +98,66 @@ export const FileContainer = styled.div<IFileContainer>`
       cursor: pointer;
     }
   }
+`;
+
+export const TopInfo = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #21252b;
+  border-radius: 3rem;
+  color: #fff;
+  margin-bottom: 3rem;
+
+  .title {
+    margin-bottom: 1rem;
+    span {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  }
+`;
+
+export const StatusContainer = styled.div`
+  width: 100%;
+  padding: 2rem 3rem;
+  background-color: #fff;
+  border-radius: 3rem;
+`;
+
+export const StatusBar = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  /* justify-content: space-around; */
+  font-size: 1.2rem;
+  color: rgb(173, 181, 189);
+  font-weight: 700;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 0.2rem solid rgb(233, 236, 239);
+
+  span {
+    width: 20%;
+
+    &:nth-child(5) {
+      color: rgb(173, 181, 189);
+    }
+
+    &:nth-child(5):hover {
+      color: #000;
+    }
+  }
+`;
+
+export const StatusRequests = styled(StatusBar)`
+  color: #000;
+  border: none;
+  cursor: pointer;
+  padding-bottom: 0;
 `;

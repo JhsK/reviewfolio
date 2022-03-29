@@ -6,6 +6,13 @@ import sequelize from './sequelize';
 enum RequestStatus {
   'recurit',
   'ing,',
+  'end',
+}
+
+enum RequestType {
+  'portfolio',
+  'resume',
+  'consulting',
 }
 
 class RequestPost extends Model {
@@ -15,6 +22,7 @@ class RequestPost extends Model {
   public body!: string;
   public file!: string;
   public status?: RequestStatus;
+  public type?: RequestType;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
@@ -41,9 +49,13 @@ RequestPost.init(
     },
     status: {
       type: DataTypes.ENUM,
-      values: ['recurit', 'ing'],
+      values: ['recurit', 'ing', 'end'],
       defaultValue: 'recurit',
     },
+    type: {
+      type: DataTypes.ENUM,
+      values: ['portfolio', 'resume', 'consulting'],
+    }
   },
   {
     sequelize,

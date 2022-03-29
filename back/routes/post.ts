@@ -62,6 +62,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
       body: req.body.body,
       UserId: req.user!.id,
       maxReviewer: req.body.reviewer,
+      type: req.body.reviewType,
     });
 
     if (req.body.files) {
@@ -120,5 +121,13 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
     return next(e);
   }
 });
+
+router.get('/user/request', isLoggedIn, async (req, res, next) => {
+  const requestList = await RequestPost.findAll({
+    where: { UserId: req.user?.id },
+  });
+  
+  res.json(requestList);
+})
 
 export default router;

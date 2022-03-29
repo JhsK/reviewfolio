@@ -34,6 +34,7 @@ const Logo = styled.span`
 
 const MenuContainer = styled.div`
   font-size: 1.1rem;
+  z-index: 999;
 
   a,
   button {
@@ -94,6 +95,10 @@ const Header = () => {
     prevOpen.current = open;
   }, [open]);
 
+  const onClickMyPage = (url: string) => {
+    router.push(`/user/${url}`);
+  };
+
   const onClickLogout = async () => {
     try {
       await postLogout();
@@ -126,9 +131,6 @@ const Header = () => {
               )}
               <Link href="/payment">
                 <a>결제하기</a>
-              </Link>
-              <Link href="/user/mypage">
-                <a>마이페이지</a>
               </Link>
               <Button
                 ref={anchorRef}
@@ -163,7 +165,7 @@ const Header = () => {
                           aria-labelledby="composition-button"
                           // onKeyDown={handleListKeyDown}
                         >
-                          <MenuItem onClick={handleClose}>{`${
+                          <MenuItem onClick={() => onClickMyPage('status')}>{`${
                             currentUser.data.position === 'programmer' ? '신청현황' : '요청내역'
                           }`}</MenuItem>
                           <MenuItem onClick={handleClose}>내 정보</MenuItem>

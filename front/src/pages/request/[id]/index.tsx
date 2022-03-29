@@ -11,6 +11,7 @@ import { getPostDetail } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { FileContainer, RequestFormFooter } from 'src/components/style';
+import useAuth from 'src/hooks/useAuth';
 
 interface IFileContainer {
   isInputProp: boolean;
@@ -66,6 +67,7 @@ const ButtonContainer = styled.div`
 `;
 
 const RequestDetail = () => {
+  const currentUser = useAuth();
   const router = useRouter();
   const { id } = router.query;
   const { data } = useQuery(['postDetail', id], () => getPostDetail(id as string));
@@ -82,7 +84,7 @@ const RequestDetail = () => {
             <ExtendsRequestFormFooter>
               <span>{`작성자: ${data?.User.nickname} - ${data?.User.job.toUpperCase()}`}</span>
               <div className="icon">
-                <span className="type">포트폴리오</span>
+                <span className="type">{data?.type}</span>
                 <IoPersonSharp size="1rem" />
                 <span>{`x ${data?.maxReviewer}`}</span>
               </div>
@@ -102,18 +104,20 @@ const RequestDetail = () => {
               ))}
           </ExtendsFileContainer>
         </Stack>
-        <ButtonContainer>
-          <Box mr={1}>
-            <Button size="large" variant="contained">
-              신청
-            </Button>
-          </Box>
-          <Box mr={1}>
-            <Button onClick={() => router.back()} size="large" variant="outlined">
-              목록
-            </Button>
-          </Box>
-        </ButtonContainer>
+        {currentUser.data.position === 'programmer' && (
+          <ButtonContainer>
+            <Box mr={1}>
+              <Button size="large" variant="contained">
+                신청
+              </Button>
+            </Box>
+            <Box mr={1}>
+              <Button onClick={() => router.back()} size="large" variant="outlined">
+                목록
+              </Button>
+            </Box>
+          </ButtonContainer>
+        )}
       </Container>
     </Layout>
   );

@@ -83,7 +83,7 @@ const List = () => {
                     <RequestFormFooter>
                       <span>{`작성자: ${post.User.nickname} - ${post.User.job.toUpperCase()}`}</span>
                       <div className="icon">
-                        <span className="type">포트폴리오</span>
+                        <span className="type">{post.type}</span>
                         <IoPersonSharp size="1rem" />
                         <span>{`x ${post.maxReviewer}`}</span>
                       </div>

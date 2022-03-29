@@ -19,6 +19,12 @@ const Form = styled.form`
   .top {
     display: flex;
     justify-content: space-between;
+
+    .selectContainer {
+      display: flex;
+      justify-content: space-between;
+      width: 30%;
+    }
   }
 
   .error {
@@ -44,10 +50,11 @@ const Request = () => {
   const [fileList, setFileList] = useState([]);
   const [filePath, setFilePath] = useState<string[]>(null);
   const [reviewer, setReviewer] = useState<string | number>('');
+  const [reivewType, setReviewType] = useState('');
   const router = useRouter();
 
   const onSubmit = async (data) => {
-    if (reviewer === '') {
+    if (reviewer === '' || reviewer === '') {
       return toast.error('리뷰어 인원을 선택해주세요', {
         position: 'top-right',
         autoClose: 2000,
@@ -70,6 +77,10 @@ const Request = () => {
     return null;
   };
 
+  const onChangeRevieType = (e: SelectChangeEvent) => {
+    setReviewType(e.target.value);
+  };
+
   const onChangeReviewer = (e: SelectChangeEvent) => {
     setReviewer(e.target.value);
   };
@@ -79,7 +90,6 @@ const Request = () => {
   };
 
   const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files);
     const formData = new FormData();
     const fileObj = Array.from(e.target.files);
 
@@ -102,24 +112,38 @@ const Request = () => {
         <Stack spacing={4}>
           <div className="top">
             <TextField
-              sx={{ width: '70%' }}
+              sx={{ width: '65%' }}
               id="standard-basic"
               {...register('title', { required: '필수 항목입니다' })}
               label="제목"
               variant="standard"
             />
-            <Select
-              {...register('reviewer')}
-              value={reviewer}
-              onChange={onChangeReviewer}
-              sx={{ width: '20%' }}
-              displayEmpty
-            >
-              <MenuItem value="">리뷰어 인원 설정</MenuItem>
-              <MenuItem value={1}>최대 1명</MenuItem>
-              <MenuItem value={2}>최대 2명</MenuItem>
-              <MenuItem value={3}>최대 3명</MenuItem>
-            </Select>
+            <div className="selectContainer">
+              <Select
+                {...register('reviewType')}
+                value={reivewType}
+                onChange={onChangeRevieType}
+                sx={{ width: '45%' }}
+                displayEmpty
+              >
+                <MenuItem value="">리뷰 유형</MenuItem>
+                <MenuItem value="portfolio">포트폴리오</MenuItem>
+                <MenuItem value="resume">이력서</MenuItem>
+                <MenuItem value="consulting">고민 상담</MenuItem>
+              </Select>
+              <Select
+                {...register('reviewer')}
+                value={reviewer}
+                onChange={onChangeReviewer}
+                sx={{ width: '50%' }}
+                displayEmpty
+              >
+                <MenuItem value="">리뷰어 인원 설정</MenuItem>
+                <MenuItem value={1}>최대 1명</MenuItem>
+                <MenuItem value={2}>최대 2명</MenuItem>
+                <MenuItem value={3}>최대 3명</MenuItem>
+              </Select>
+            </div>
           </div>
           <span className="error">{errors?.title?.message}</span>
           <TextField

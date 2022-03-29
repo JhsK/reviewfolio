@@ -63,4 +63,5 @@ export interface IRequestPost extends Model {
   UserId: number;
   User: IAssociateUser;
   Files: IFile[];
+  type: 'portfolio' | 'resume' | 'consulting';
 }
