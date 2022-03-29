@@ -9,6 +9,7 @@ class Programmer extends Model {
   public refundPoint!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
 }
 
 Programmer.init(
