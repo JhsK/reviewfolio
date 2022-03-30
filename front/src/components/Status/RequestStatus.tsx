@@ -3,17 +3,23 @@ import { useQuery } from 'react-query';
 import { getUserRequest } from 'src/api';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { IRequestPost } from 'src/types';
 import { StatusBar, StatusContainer, StatusRequests, TopInfo } from '../style';
 
 const RequestStatus = () => {
   const { data } = useQuery('userRequest', getUserRequest);
   const router = useRouter();
 
-  const onClickDetail = (id: number) => {
-    router.push(`/request/${id}`);
+  const onClickDetail = (request: IRequestPost) => {
+    if (request.status === 'recurit') {
+      router.push(`/request/${request.id}`);
+    }
+
+    router.push(`/review/${request.Applications[0].id}`);
   };
 
   console.log(data);
+
   return (
     <>
       <TopInfo>
@@ -41,7 +47,7 @@ const RequestStatus = () => {
               <span>{request.type}</span>
               <span>{request.maxReviewer}</span>
               <span>{request.status}</span>
-              <span onClick={() => onClickDetail(request.id)}>상세보기</span>
+              <span onClick={() => onClickDetail(request)}>상세보기</span>
             </StatusRequests>
           ))}
       </StatusContainer>

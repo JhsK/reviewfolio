@@ -94,14 +94,18 @@ router.get('/:id', async (req, res, next) => {
   try {
     const post = await RequestPost.findOne({
       where: { id: req.params.id },
-      include: [{
-        model: User,
-        attributes: ['id', 'nickname', 'job'],
-      }, {
-        model: File,
-      }, {
-        model: Application,
-      }],
+      include: [
+        {
+          model: User,
+          attributes: ['id', 'nickname', 'job'],
+        },
+        {
+          model: File,
+        },
+        {
+          model: Application,
+        },
+      ],
     });
     return res.json(post);
   } catch (e) {
@@ -127,9 +131,14 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
 router.get('/user/request', isLoggedIn, async (req, res, next) => {
   const requestList = await RequestPost.findAll({
     where: { UserId: req.user?.id },
+    include: [
+      {
+        model: Application,
+      },
+    ],
   });
-  
+
   res.json(requestList);
-})
+});
 
 export default router;

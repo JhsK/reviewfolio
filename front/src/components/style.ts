@@ -144,14 +144,6 @@ export const StatusBar = styled.div`
 
   span {
     width: 20%;
-
-    &:nth-child(5) {
-      color: rgb(173, 181, 189);
-    }
-
-    &:nth-child(5):hover {
-      color: #000;
-    }
   }
 `;
 
@@ -160,4 +152,14 @@ export const StatusRequests = styled(StatusBar)`
   border: none;
   cursor: pointer;
   padding-bottom: 0;
+
+  span {
+    &:nth-child(5) {
+      color: rgb(173, 181, 189);
+    }
+
+    &:nth-child(5):hover {
+      color: #000;
+    }
+  }
 `;

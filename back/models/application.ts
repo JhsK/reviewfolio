@@ -20,6 +20,7 @@ Application.init(
 export const associate = (db: dbType) => {
   db.Application.belongsTo(db.Programmer);
   db.Application.belongsTo(db.RequestPost);
+  db.Application.hasMany(db.Comment);
 };
 
 export default Application;
