@@ -15,7 +15,7 @@ const RequestStatus = () => {
       router.push(`/request/${request.id}`);
     }
 
-    router.push(`/review/${request.Applications[0].id}`);
+    router.push(`/review/${request.id}`);
   };
 
   console.log(data);

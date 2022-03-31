@@ -55,7 +55,7 @@ interface IFile extends Model {
   src: string;
 }
 
-interface IApplication extends Model {
+export interface IApplication extends Model {
   ProgrammerId: number;
   RequestPostId: number;
 }
@@ -71,4 +71,12 @@ export interface IRequestPost extends Model {
   Files: IFile[];
   type: 'portfolio' | 'resume' | 'consulting';
   Applications: IApplication[];
+}
+
+export interface IComment extends Model {
+  content: string;
+  RequestPostId: number;
+  ApplicationId?: any;
+  UserId: number;
+  position: string;
 }

@@ -67,6 +67,7 @@ export const associate = (db: dbType) => {
   db.User.hasMany(db.RequestPost, { as: 'RequestPosts' });
   db.User.hasMany(db.TicketHistory, { as: 'TicketHistories' });
   db.User.hasMany(db.Payment, { as: 'Payments' });
+  db.User.hasMany(db.Comment, { as: 'Comments' });
 };
 
 export interface IUser extends User {}

@@ -8,6 +8,7 @@ import passport from 'passport';
 import { sequelize } from './models';
 import passportConfig from './passport';
 import applicationRouter from './routes/application';
+import commentRouter from './routes/comment';
 import postRouter from './routes/post';
 import userRouter from './routes/user';
 
@@ -53,6 +54,7 @@ app.use(passport.session());
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 app.use('/application', applicationRouter);
+app.use('/comment', commentRouter);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('서버 실행 중');

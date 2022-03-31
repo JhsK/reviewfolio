@@ -5,7 +5,7 @@ import sequelize from './sequelize';
 
 enum RequestStatus {
   'recurit',
-  'ing,',
+  'ing',
   'end',
 }
 
@@ -71,6 +71,7 @@ export const associate = (db: dbType) => {
   db.RequestPost.belongsTo(db.User);
   db.RequestPost.hasMany(db.File);
   db.RequestPost.hasMany(db.Application);
+  db.RequestPost.hasMany(db.Comment);
 };
 
 export default RequestPost;

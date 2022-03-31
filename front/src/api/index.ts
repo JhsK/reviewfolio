@@ -1,4 +1,4 @@
-import { ICurrentUser, IRequestPost, JoinInput } from 'src/types';
+import { IApplication, IComment, ICurrentUser, IRequestPost, JoinInput } from 'src/types';
 import { API } from './api.config';
 
 export const postSignUp = (params: JoinInput) => API.post('/user', params);
@@ -25,3 +25,13 @@ export const getUserRequest = async () => {
 };
 
 export const postApplication = (params) => API.post('/application', params);
+export const getApplicant = async (id: string) => {
+  const { data } = await API.get<IApplication[]>(`/application/${id}`);
+  return data;
+};
+
+export const postComment = (params) => API.post('/comment', params);
+export const getComment = async (id: string) => {
+  const { data } = await API.get<IComment[]>(`/comment/${id}`);
+  return data;
+};
