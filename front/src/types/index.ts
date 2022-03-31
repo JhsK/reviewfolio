@@ -58,6 +58,7 @@ interface IFile extends Model {
 export interface IApplication extends Model {
   ProgrammerId: number;
   RequestPostId: number;
+  RequestPost?: IRequestPost;
 }
 
 export interface IRequestPost extends Model {

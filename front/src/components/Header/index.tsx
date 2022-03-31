@@ -102,7 +102,7 @@ const Header = () => {
   const onClickLogout = async () => {
     try {
       await postLogout();
-      router.reload();
+      router.replace('/');
     } catch (error) {
       console.error(error);
     }

@@ -5,18 +5,7 @@ import { isLoggedIn } from './middleware';
 const router = express.Router();
 
 router.get('/:id', isLoggedIn, async (req, res, next) => {
-  console.log(req.params);
   try {
-    // const StudentComment = await Comment.findAll({
-    //   where: { RequestPostId: req.params.id, position: 'student'},
-    // });
-
-    // const ProgrammerComment = await Comment.findAll({
-    //     where: { RequestPostId: req.params.id, position: 'programmer'},
-    //   });
-
-    // const returnComment = [StudentComment, ProgrammerComment];
-
     const comment = await Comment.findAll({
       where: { RequestPostId: req.params.id },
     });

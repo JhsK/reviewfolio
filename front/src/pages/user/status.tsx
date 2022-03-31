@@ -7,6 +7,7 @@ import Header from 'src/components/Header';
 import Footer from 'src/components/Footer';
 import { StatusBar, StatusContainer, TopInfo } from 'src/components/style';
 import RequestStatus from 'src/components/Status/RequestStatus';
+import ApplicationStatus from 'src/components/Status/ApplicationStatus';
 
 const Container = styled.div`
   width: 100%;
@@ -30,7 +31,7 @@ const Status = () => {
         <Header />
       </Layout>
       <Layout bgColor="#f8f9fb">
-        <Container>{currentUser.data.position === 'student' ? <RequestStatus /> : null}</Container>
+        <Container>{currentUser.data.position === 'student' ? <RequestStatus /> : <ApplicationStatus />}</Container>
       </Layout>
       <Footer />
     </>

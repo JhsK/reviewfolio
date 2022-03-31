@@ -51,4 +51,22 @@ router.post('/', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get('/user/:programmerId', async (req, res, next) => {
+  try {
+    const applicationList = await Application.findAll({
+      where: { RequestPostId: req.params.programmerId },
+      include: [
+        {
+          model: RequestPost,
+        },
+      ],
+    });
+
+    return res.json(applicationList);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 export default router;

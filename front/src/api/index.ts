@@ -23,6 +23,10 @@ export const getUserRequest = async () => {
   const { data } = await API.get<IRequestPost[]>('/post/user/request');
   return data;
 };
+export const getUserApplication = async (id: number) => {
+  const { data } = await API.get<IApplication[]>(`/application/user/${id}`);
+  return data;
+};
 
 export const postApplication = (params) => API.post('/application', params);
 export const getApplicant = async (id: string) => {
