@@ -1,16 +1,35 @@
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { getApplicant, getComment, postComment } from 'src/api';
+import React from 'react';
+import { MdKeyboardArrowRight } from 'react-icons/md';
+import { useQuery } from 'react-query';
+import { getApplicant, getComment } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
-import styled from '@emotion/styled';
 import CommentForm from 'src/components/Review/Form';
 import useAuth from 'src/hooks/useAuth';
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
+`;
+
+const TopContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .post {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    svg {
+      opacity: 0.5;
+      padding-bottom: 0.1rem;
+    }
+  }
 `;
 
 const TabContainer = styled.div`
@@ -29,12 +48,7 @@ const TabContainer = styled.div`
     justify-content: center;
     background-color: #f8f9fb;
     cursor: pointer;
-    // #f4f4f4
   }
-`;
-
-const BubbleContainer = styled.div`
-  width: 100%;
 `;
 
 const BubbleLeft = styled.div`
@@ -82,12 +96,10 @@ const OtherContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const MeContainer = styled.div`
-  width: 100%;
-  display: flex;
+const MeContainer = styled(OtherContainer)`
   justify-content: flex-end;
   padding-right: 1rem;
-  margin-bottom: 1rem;
+  padding-left: 0;
 `;
 
 const Review = () => {
@@ -97,7 +109,6 @@ const Review = () => {
   const { data: applicant } = useQuery(['applicant'], () => getApplicant(id as string));
   const { data: chatList } = useQuery(['chatList'], () => getComment(id as string));
 
-  const userType = () => (currentUser.data.position === 'student' ? 0 : 1);
   console.log(applicant);
   console.log(chatList);
 
@@ -105,35 +116,38 @@ const Review = () => {
     <Layout>
       <Header />
       <Container>
-        <TabContainer>
-          {applicant &&
-            applicant.map((v, i) => (
-              <div className="applicantTab" key={v.id}>
-                {i}
-              </div>
-            ))}
-        </TabContainer>
+        <TopContainer>
+          <TabContainer>
+            {applicant &&
+              applicant.map((v, i) => (
+                <div className="applicantTab" key={v.id}>
+                  {i}
+                </div>
+              ))}
+          </TabContainer>
+          <div className="post" onClick={() => router.push(`/request/${id}`)}>
+            <span>해당 게시물 바로보기</span>
+            <MdKeyboardArrowRight size="1.5rem" />
+          </div>
+        </TopContainer>
         {chatList &&
           chatList.map((chat) =>
             chat.position === currentUser.data.position ? (
-              <OtherContainer key={chat.id}>
-                <BubbleLeft>
-                  <span>{chat.content}</span>
-                </BubbleLeft>
-              </OtherContainer>
-            ) : (
               <MeContainer key={chat.id}>
                 <BubbleRight>
                   <span>{chat.content}</span>
                 </BubbleRight>
               </MeContainer>
+            ) : (
+              <>
+                <OtherContainer key={chat.id}>
+                  <BubbleLeft>
+                    <span>{chat.content}</span>
+                  </BubbleLeft>
+                </OtherContainer>
+              </>
             ),
           )}
-        <MeContainer>
-          <BubbleRight>
-            <span>fasfaw</span>
-          </BubbleRight>
-        </MeContainer>
       </Container>
       <CommentForm id={id} position={currentUser.data.position} />
     </Layout>

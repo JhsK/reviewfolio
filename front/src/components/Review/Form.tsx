@@ -44,16 +44,21 @@ const CommentForm = ({ id, position }) => {
 
   const onSubmitComment = (e) => {
     e.preventDefault();
-    console.log(chat);
 
-    chatMutation.mutate(
-      { content: chat, postId: id, position },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(['chatList']);
+    try {
+      chatMutation.mutate(
+        { content: chat, postId: id, position },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['chatList']);
+          },
         },
-      },
-    );
+      );
+
+      setChat('');
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
