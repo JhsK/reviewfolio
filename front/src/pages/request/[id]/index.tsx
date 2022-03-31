@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IoPersonSharp } from 'react-icons/io5';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getPostDetail, postApplication } from 'src/api';
@@ -70,6 +70,8 @@ const RequestDetail = () => {
   const currentUser = useAuth();
   const router = useRouter();
   const { id } = router.query;
+  const queryClient = useQueryClient();
+  const applicationMutation = useMutation(postApplication);
   const { data } = useQuery(['postDetail', id], () => getPostDetail(id as string));
 
   const onClickApplication = async () => {
@@ -90,7 +92,15 @@ const RequestDetail = () => {
     }
 
     try {
-      await postApplication({ id });
+      applicationMutation.mutate(
+        { id },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['postDetail', id]);
+          },
+        },
+      );
+      // await postApplication({ id });
     } catch (error) {
       console.error(error);
     }
@@ -112,7 +122,7 @@ const RequestDetail = () => {
               <div className="icon">
                 <span className="type">{data?.type}</span>
                 <IoPersonSharp size="1rem" />
-                <span>{`x ${data?.maxReviewer} - ${data.Applications.length}명 신청`}</span>
+                <span>{`x ${data?.maxReviewer} - ${data?.Applications.length}명 신청`}</span>
               </div>
             </ExtendsRequestFormFooter>
           </div>
@@ -130,7 +140,7 @@ const RequestDetail = () => {
               ))}
           </ExtendsFileContainer>
         </Stack>
-        {currentUser.data.position === 'programmer' && data.maxReviewer > data.Applications.length && (
+        {currentUser.data.position === 'programmer' && data?.maxReviewer > data?.Applications.length && (
           <ButtonContainer>
             <Box mr={1}>
               <Button size="large" onClick={onClickApplication} variant="contained">
