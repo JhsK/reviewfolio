@@ -1,13 +1,15 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { useQuery } from 'react-query';
-import { getApplicant, getComment } from 'src/api';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { getApplicant, getComment, putEndReview } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import CommentForm from 'src/components/Review/Form';
 import useAuth from 'src/hooks/useAuth';
+import { IApplication } from 'src/types';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
   width: 100%;
@@ -21,14 +23,26 @@ const TopContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 2rem;
 
-  .post {
+  .statusContainer {
     display: flex;
     align-items: center;
-    cursor: pointer;
 
-    svg {
-      opacity: 0.5;
-      padding-bottom: 0.1rem;
+    .post {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      svg {
+        opacity: 0.5;
+        padding-bottom: 0.1rem;
+      }
+    }
+
+    button {
+      background-color: #fff;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
     }
   }
 `;
@@ -105,15 +119,56 @@ const Review = () => {
   const router = useRouter();
   const { id } = router.query;
   const currentUser = useAuth();
-  const [activeApplicant, setActiveApplicant] = useState(null);
+  const queryClient = useQueryClient();
+  const reviewStatusMutation = useMutation(putEndReview);
+  const [activeApplicant, setActiveApplicant] = useState<IApplication>(null);
 
   const { data: applicant } = useQuery(['applicant'], () => getApplicant(id as string), {
-    onSuccess: (data) => setActiveApplicant(data[0].ProgrammerId),
+    onSuccess: (data) => setActiveApplicant(data[0]),
   });
-  const { data: chatList } = useQuery(['chatList', activeApplicant], () => getComment(id as string, activeApplicant));
+  const { data: chatList } = useQuery(['chatList', activeApplicant?.ProgrammerId], () =>
+    getComment(id as string, activeApplicant?.ProgrammerId),
+  );
 
-  console.log(chatList);
-  console.log(activeApplicant);
+  const onClickReviewEnd = () => {
+    Swal.fire({
+      title: '정말 리뷰를 종료하시겠습니까?',
+      text: '리뷰 종료 후에는 상태를 바꿀 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '예',
+      cancelButtonText: '아니오',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          reviewStatusMutation.mutate(
+            { applicationId: activeApplicant.ProgrammerId, programmerId: currentUser.data.programmerId },
+            {
+              onSuccess: () => {
+                queryClient.invalidateQueries(['applicant']);
+              },
+            },
+          );
+        } catch (error) {
+          console.error(error);
+        }
+        Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+      }
+    });
+  };
+
+  const statusInputForm = useCallback(() => {
+    if (currentUser.data?.position === 'student') {
+      return <span>{`[${activeApplicant?.status}]`}</span>;
+    }
+    if (activeApplicant?.status === '리뷰 진행중') return <button onClick={onClickReviewEnd}>리뷰 종료하기</button>;
+    return <span>[리뷰 종료]</span>;
+  }, [activeApplicant]);
+
+  console.log(applicant);
+
   return (
     <Layout>
       <Header />
@@ -125,18 +180,25 @@ const Review = () => {
                 applicant.map((v, i) => (
                   <div
                     className="applicantTab"
-                    style={{ borderColor: `${v.ProgrammerId === activeApplicant ? 'green' : 'rgba(0, 0, 0, 0.2)'}` }}
+                    style={{
+                      borderColor: `${
+                        v.ProgrammerId === activeApplicant?.ProgrammerId ? 'green' : 'rgba(0, 0, 0, 0.2)'
+                      }`,
+                    }}
                     key={v.id}
-                    onClick={() => setActiveApplicant(v.ProgrammerId)}
+                    onClick={() => setActiveApplicant(v)}
                   >
                     {i + 1}
                   </div>
                 ))}
             </TabContainer>
           )}
-          <div className="post" onClick={() => router.push(`/request/${id}`)}>
-            <span>해당 게시물 바로보기</span>
-            <MdKeyboardArrowRight size="1.5rem" />
+          <div className="statusContainer">
+            <div className="post" onClick={() => router.push(`/request/${id}`)}>
+              <span>해당 게시물 바로보기</span>
+              <MdKeyboardArrowRight size="1.5rem" />
+            </div>
+            {statusInputForm()}
           </div>
         </TopContainer>
         {chatList &&
@@ -158,7 +220,9 @@ const Review = () => {
             ),
           )}
       </Container>
-      <CommentForm id={id} position={currentUser.data.position} activeApplicant={activeApplicant} />
+      {activeApplicant?.status === '리뷰 진행중' && (
+        <CommentForm id={id} position={currentUser.data.position} activeApplicant={activeApplicant.ProgrammerId} />
+      )}
     </Layout>
   );
 };

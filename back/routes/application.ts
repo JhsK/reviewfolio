@@ -28,6 +28,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     const result = await Application.create({
       ProgrammerId: programmer?.id,
       RequestPostId: req.body.id,
+      status: '리뷰 진행중',
     });
 
     const applicant = await Application.findAll({
@@ -45,6 +46,24 @@ router.post('/', isLoggedIn, async (req, res, next) => {
     }
 
     return res.json(result);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+router.put('/', isLoggedIn, async (req, res, next) => {
+  try {
+    const update = await Application.update(
+      {
+        status: '리뷰 종료',
+      },
+      {
+        where: { id: req.body.applicationId, ProgrammerId: req.body.programmerId },
+      },
+    );
+
+    return res.json(update);
   } catch (error) {
     console.error(error);
     next(error);

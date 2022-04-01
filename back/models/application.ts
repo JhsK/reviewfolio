@@ -1,13 +1,24 @@
-import { Model } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { dbType } from '.';
 import sequelize from './sequelize';
 
+enum ApplicationStatus {
+  '리뷰 진행중',
+  '리뷰 종료',
+}
+
 class Application extends Model {
   public readonly id!: number;
+  public status!: ApplicationStatus;
 }
 
 Application.init(
-  {},
+  {
+    status: {
+      type: DataTypes.ENUM,
+      values: ['리뷰 진행중', '리뷰 종료'],
+    },
+  },
   {
     sequelize,
     modelName: 'Application',

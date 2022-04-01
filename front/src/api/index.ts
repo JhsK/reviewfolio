@@ -39,3 +39,5 @@ export const getComment = async (id: string, applicationId: number) => {
   const { data } = await API.get<IComment[]>(`/comment?postId=${id}&applicationId=${applicationId}`);
   return data;
 };
+
+export const putEndReview = (params) => API.put('/application', params);

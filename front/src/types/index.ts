@@ -59,6 +59,7 @@ export interface IApplication extends Model {
   ProgrammerId: number;
   RequestPostId: number;
   RequestPost?: IRequestPost;
+  status: '리뷰 진행중' | '리뷰 종료';
 }
 
 export interface IRequestPost extends Model {
@@ -66,7 +67,7 @@ export interface IRequestPost extends Model {
   body: string;
   file?: any;
   maxReviewer: number;
-  status: 'recurit' | 'ing';
+  status: 'recurit' | 'ing' | 'end';
   UserId: number;
   User: IAssociateUser;
   Files: IFile[];
