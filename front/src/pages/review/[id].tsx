@@ -19,6 +19,7 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2rem;
 
   .post {
     display: flex;
@@ -36,7 +37,6 @@ const TabContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 2rem 0;
-  margin-bottom: 1rem;
 
   .applicantTab {
     width: 50px;
@@ -119,19 +119,21 @@ const Review = () => {
       <Header />
       <Container>
         <TopContainer>
-          <TabContainer>
-            {applicant &&
-              applicant.map((v, i) => (
-                <div
-                  className="applicantTab"
-                  style={{ borderColor: `${v.ProgrammerId === activeApplicant ? 'green' : 'rgba(0, 0, 0, 0.2)'}` }}
-                  key={v.id}
-                  onClick={() => setActiveApplicant(v.ProgrammerId)}
-                >
-                  {i + 1}
-                </div>
-              ))}
-          </TabContainer>
+          {currentUser.data?.position === 'student' && (
+            <TabContainer>
+              {applicant &&
+                applicant.map((v, i) => (
+                  <div
+                    className="applicantTab"
+                    style={{ borderColor: `${v.ProgrammerId === activeApplicant ? 'green' : 'rgba(0, 0, 0, 0.2)'}` }}
+                    key={v.id}
+                    onClick={() => setActiveApplicant(v.ProgrammerId)}
+                  >
+                    {i + 1}
+                  </div>
+                ))}
+            </TabContainer>
+          )}
           <div className="post" onClick={() => router.push(`/request/${id}`)}>
             <span>해당 게시물 바로보기</span>
             <MdKeyboardArrowRight size="1.5rem" />

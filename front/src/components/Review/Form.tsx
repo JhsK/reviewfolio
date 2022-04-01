@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { toast, ToastContainer } from 'react-toastify';
 import { postComment } from 'src/api';
+import 'react-toastify/dist/ReactToastify.css';
 
 const InputContainer = styled.form`
   width: 100%;
@@ -38,12 +40,24 @@ const CommentForm = ({ id, position, activeApplicant }) => {
   const queryClient = useQueryClient();
   const chatMutation = useMutation(postComment);
 
-  const onChangeChat = (e) => {
+  const onChangeChat = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setChat(e.target.value);
   };
 
-  const onSubmitComment = (e) => {
+  const onSubmitComment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (chat === '') {
+      return toast.error('내용을 입력해주세요', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
 
     try {
       chatMutation.mutate(
@@ -59,13 +73,18 @@ const CommentForm = ({ id, position, activeApplicant }) => {
     } catch (error) {
       console.error(error);
     }
+
+    return null;
   };
 
   return (
-    <InputContainer onSubmit={onSubmitComment}>
-      <textarea onChange={onChangeChat} />
-      <button type="submit">전송</button>
-    </InputContainer>
+    <>
+      <ToastContainer />
+      <InputContainer onSubmit={onSubmitComment}>
+        <textarea onChange={onChangeChat} />
+        <button type="submit">전송</button>
+      </InputContainer>
+    </>
   );
 };
 
