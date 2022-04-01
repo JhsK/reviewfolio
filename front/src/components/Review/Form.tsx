@@ -33,7 +33,7 @@ const InputContainer = styled.form`
   }
 `;
 
-const CommentForm = ({ id, position }) => {
+const CommentForm = ({ id, position, activeApplicant }) => {
   const [chat, setChat] = useState('');
   const queryClient = useQueryClient();
   const chatMutation = useMutation(postComment);
@@ -47,10 +47,10 @@ const CommentForm = ({ id, position }) => {
 
     try {
       chatMutation.mutate(
-        { content: chat, postId: id, position },
+        { content: chat, postId: id, position, ApplicationId: activeApplicant },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries(['chatList']);
+            queryClient.invalidateQueries(['chatList', activeApplicant]);
           },
         },
       );

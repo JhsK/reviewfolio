@@ -35,7 +35,7 @@ export const getApplicant = async (id: string) => {
 };
 
 export const postComment = (params) => API.post('/comment', params);
-export const getComment = async (id: string) => {
-  const { data } = await API.get<IComment[]>(`/comment/${id}`);
+export const getComment = async (id: string, applicationId: number) => {
+  const { data } = await API.get<IComment[]>(`/comment?postId=${id}&applicationId=${applicationId}`);
   return data;
 };

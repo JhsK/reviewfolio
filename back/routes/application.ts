@@ -54,7 +54,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 router.get('/user/:programmerId', async (req, res, next) => {
   try {
     const applicationList = await Application.findAll({
-      where: { RequestPostId: req.params.programmerId },
+      where: { ProgrammerId: req.params.programmerId },
       include: [
         {
           model: RequestPost,

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useQuery } from 'react-query';
 import { getApplicant, getComment } from 'src/api';
@@ -48,15 +48,14 @@ const TabContainer = styled.div`
     justify-content: center;
     background-color: #f8f9fb;
     cursor: pointer;
+    margin-right: 1rem;
   }
 `;
 
 const BubbleLeft = styled.div`
   position: relative;
   padding: 1rem;
-  /* width: 400px; */
   max-width: 50%;
-  /* height: 100px; */
   background: #f8f9fb;
   border-radius: 10px;
 
@@ -106,12 +105,15 @@ const Review = () => {
   const router = useRouter();
   const { id } = router.query;
   const currentUser = useAuth();
-  const { data: applicant } = useQuery(['applicant'], () => getApplicant(id as string));
-  const { data: chatList } = useQuery(['chatList'], () => getComment(id as string));
+  const [activeApplicant, setActiveApplicant] = useState(null);
 
-  console.log(applicant);
+  const { data: applicant } = useQuery(['applicant'], () => getApplicant(id as string), {
+    onSuccess: (data) => setActiveApplicant(data[0].ProgrammerId),
+  });
+  const { data: chatList } = useQuery(['chatList', activeApplicant], () => getComment(id as string, activeApplicant));
+
   console.log(chatList);
-
+  console.log(activeApplicant);
   return (
     <Layout>
       <Header />
@@ -120,8 +122,13 @@ const Review = () => {
           <TabContainer>
             {applicant &&
               applicant.map((v, i) => (
-                <div className="applicantTab" key={v.id}>
-                  {i}
+                <div
+                  className="applicantTab"
+                  style={{ borderColor: `${v.ProgrammerId === activeApplicant ? 'green' : 'rgba(0, 0, 0, 0.2)'}` }}
+                  key={v.id}
+                  onClick={() => setActiveApplicant(v.ProgrammerId)}
+                >
+                  {i + 1}
                 </div>
               ))}
           </TabContainer>
@@ -149,7 +156,7 @@ const Review = () => {
             ),
           )}
       </Container>
-      <CommentForm id={id} position={currentUser.data.position} />
+      <CommentForm id={id} position={currentUser.data.position} activeApplicant={activeApplicant} />
     </Layout>
   );
 };
