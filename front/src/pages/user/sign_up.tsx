@@ -101,7 +101,6 @@ const SignUp = () => {
   };
 
   const onSubmit: SubmitHandler<FormInput> = async (data: FormInput) => {
-    console.log(data);
     if (selectJob === '직무를 선택해주세요') {
       return toast.error('직무를 선택해주세요', {
         position: 'top-right',

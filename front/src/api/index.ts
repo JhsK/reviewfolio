@@ -41,3 +41,5 @@ export const getComment = async (id: string, applicationId: number) => {
 };
 
 export const putEndReview = (params) => API.put('/application', params);
+
+export const postBuyTicket = (params) => API.post('/order', params);

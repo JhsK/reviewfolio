@@ -11,6 +11,7 @@ import HomeCompany from 'src/components/HomeCompany';
 import Layout from 'src/components/Layout';
 import { Hr } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
+import usePayment from 'src/hooks/usePayment';
 
 const Container = styled.div`
   width: 100%;
@@ -53,6 +54,7 @@ const InfoContainer = styled.div`
 const Home = () => {
   const router = useRouter();
   const currentUser = useAuth();
+  usePayment(router.query);
 
   const onClickLogout = async () => {
     try {
