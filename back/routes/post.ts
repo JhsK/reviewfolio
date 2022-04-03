@@ -78,6 +78,19 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
       }
     }
 
+    const findUser = await User.findOne({
+      where: { id: req.user?.id },
+    });
+
+    await User.update(
+      {
+        ticket: (findUser?.ticket as number) - req.body.maxReviewer,
+      },
+      {
+        where: { id: req.user?.id },
+      },
+    );
+
     return res.json(newPost);
   } catch (err) {
     console.error(err);

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
@@ -11,6 +11,8 @@ import { postFilesUpload, postRequestCreate } from 'src/api';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
 import { FileContainer } from 'src/components/style';
+import useAuth from 'src/hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Form = styled.form`
   display: flex;
@@ -51,11 +53,23 @@ const Request = () => {
   const [filePath, setFilePath] = useState<string[]>(null);
   const [reviewer, setReviewer] = useState<string | number>('');
   const [reivewType, setReviewType] = useState('');
+  const currentUser = useAuth();
   const router = useRouter();
 
+  useEffect(() => {
+    if (currentUser.data.ticket < 1) {
+      Swal.fire({
+        title: '티켓이 부족합니다',
+        icon: 'error',
+      }).then((result) => {
+        router.replace('/');
+      });
+    }
+  }, [currentUser.data]);
+
   const onSubmit = async (data) => {
-    if (reviewer === '' || reviewer === '') {
-      return toast.error('리뷰어 인원을 선택해주세요', {
+    if (reviewer === '' || reivewType === '') {
+      return toast.error('리뷰어 티입 및 인원을 선택해주세요', {
         position: 'top-right',
         autoClose: 2000,
         hideProgressBar: false,
@@ -66,6 +80,18 @@ const Request = () => {
       });
     }
     const values = { ...data, files: filePath };
+
+    if (reviewer > currentUser.data.ticket) {
+      return toast.error('티켓이 부족합니다. 인원을 줄여주세요', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
 
     try {
       await postRequestCreate(values);
