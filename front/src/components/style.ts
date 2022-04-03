@@ -154,11 +154,11 @@ export const StatusRequests = styled(StatusBar)`
   padding-bottom: 0;
 
   span {
-    &:nth-child(5) {
+    &:nth-of-type(5) {
       color: rgb(173, 181, 189);
     }
 
-    &:nth-child(5):hover {
+    &:nth-of-type(5):hover {
       color: #000;
     }
   }

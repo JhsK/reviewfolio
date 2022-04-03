@@ -168,7 +168,7 @@ const Header = () => {
                           <MenuItem onClick={() => onClickMyPage('status')}>{`${
                             currentUser.data.position === 'programmer' ? '신청현황' : '요청내역'
                           }`}</MenuItem>
-                          <MenuItem onClick={handleClose}>내 정보</MenuItem>
+                          <MenuItem onClick={() => onClickMyPage('info')}>내 정보</MenuItem>
                           <MenuItem onClick={onClickLogout}>로그아웃</MenuItem>
                         </MenuList>
                       </ClickAwayListener>
