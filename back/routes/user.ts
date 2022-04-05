@@ -125,4 +125,23 @@ router.put('/change-password', isLoggedIn, async (req, res, next) => {
   }
 });
 
+router.put('/change-info', isLoggedIn, async (req, res, next) => {
+  try {
+    const newUser = await User.update(
+      {
+        userName: req.body.userName,
+        job: req.body.job,
+      },
+      {
+        where: { id: req.user?.id },
+      },
+    );
+
+    return res.json(newUser);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 export default router;

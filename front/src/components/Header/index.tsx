@@ -102,7 +102,11 @@ const Header = () => {
   const onClickLogout = async () => {
     try {
       await postLogout();
-      router.replace('/');
+      if (router.pathname === '/') {
+        router.reload();
+      } else {
+        router.replace('/');
+      }
     } catch (error) {
       console.error(error);
     }

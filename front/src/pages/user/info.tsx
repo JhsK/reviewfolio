@@ -12,16 +12,14 @@ import useAuth from 'src/hooks/useAuth';
 import Swal from 'sweetalert2';
 import { IoCloseOutline } from 'react-icons/io5';
 
-const Container = styled.div`
+export const Container = styled.div`
   width: 100%;
   height: calc(100vh - (185px + 100px));
   display: flex;
   align-items: center;
 `;
 
-const ExtendsStatusContainer = styled(StatusContainer)``;
-
-const InfoColumn = styled.div`
+export const InfoColumn = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -126,11 +124,16 @@ const Info = () => {
     setOpen(false);
   };
 
+  const onClickUpdateInfo = () => {
+    if (currentUser.isAuthenticate) {
+      router.push('/user/update/info');
+    }
+  };
+
   const onSubmit: SubmitHandler<IChangePassword> = async (data: IChangePassword) => {
     if (data.password !== data.repeatPassword) {
       setError('repeatPassword', { message: '비밀번호가 동일하지 않습니다' }, { shouldFocus: true });
     }
-
     setOpen(false);
 
     try {
@@ -158,7 +161,7 @@ const Info = () => {
       </Layout>
       <Layout bgColor="#f8f9fb">
         <Container>
-          <ExtendsStatusContainer>
+          <StatusContainer>
             <h1>계정 관리</h1>
             <InfoColumn>
               <div className="infoData">
@@ -178,7 +181,7 @@ const Info = () => {
                 <span>이름</span>
                 <span>{currentUser.data.userName}</span>
               </div>
-              <button>내정보 변경</button>
+              <button onClick={onClickUpdateInfo}>내정보 변경</button>
             </InfoColumn>
             <InfoColumn>
               <div className="infoData">
@@ -234,7 +237,7 @@ const Info = () => {
                 </div>
               </ModalContainer>
             </Modal>
-          </ExtendsStatusContainer>
+          </StatusContainer>
         </Container>
       </Layout>
       <Footer />
