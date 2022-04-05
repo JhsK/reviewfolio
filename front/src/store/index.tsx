@@ -17,6 +17,7 @@ const ContextUser = createContext<IContextUser>({
   },
   isAuthenticate: false,
   setData: (param: ICurrentUser) => {},
+  setLogout: () => {},
 });
 
 export default ContextUser;

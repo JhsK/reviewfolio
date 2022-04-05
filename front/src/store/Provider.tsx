@@ -12,6 +12,14 @@ const ContextProvider = (props) => {
     }));
   };
 
+  const setLogout = () => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    setState((prevState) => ({
+      ...prevState,
+      isAuthenticate: false,
+    }));
+  };
+
   const initialState = {
     data: {
       id: null,
@@ -28,6 +36,7 @@ const ContextProvider = (props) => {
     },
     isAuthenticate: false,
     setData,
+    setLogout,
   };
 
   const [state, setState] = useState(initialState);

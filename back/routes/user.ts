@@ -15,7 +15,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     });
     user.career = programmerData?.career;
     user.programmerId = programmerData?.id;
-  } 
+  }
   delete user.password;
   console.log(user);
   return res.json(user);
@@ -103,6 +103,25 @@ router.get('/:id', async (req, res, next) => {
   } catch (err) {
     console.error(err);
     next(err);
+  }
+});
+
+router.put('/change-password', isLoggedIn, async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const newUser = User.update(
+      {
+        password: hashedPassword,
+      },
+      {
+        where: { id: req.user?.id },
+      },
+    );
+
+    return res.json(newUser);
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 });
 

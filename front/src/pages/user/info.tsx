@@ -1,10 +1,16 @@
 import styled from '@emotion/styled';
-import React from 'react';
+import { Box, Modal } from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { postLogout, putChangePassword } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { StatusContainer } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
+import Swal from 'sweetalert2';
+import { IoCloseOutline } from 'react-icons/io5';
 
 const Container = styled.div`
   width: 100%;
@@ -47,8 +53,103 @@ const InfoColumn = styled.div`
   }
 `;
 
+const ModalContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .inner {
+    width: 500px;
+    height: 250px;
+    background-color: #fff;
+    padding: 1rem;
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    span {
+      font-size: 0.8rem;
+      color: red;
+    }
+  }
+
+  .container {
+    width: 100%;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    display: flex;
+
+    label {
+      width: 30%;
+    }
+
+    input {
+      width: 50%;
+    }
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+  }
+`;
+
+interface IChangePassword {
+  password: string;
+  repeatPassword: string;
+}
+
 const Info = () => {
   const currentUser = useAuth();
+  const [open, setOpen] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<IChangePassword>();
+  const router = useRouter();
+
+  const onClickChangePassword = () => {
+    setOpen(true);
+  };
+
+  const onClickModal = () => {
+    setOpen(false);
+  };
+
+  const onSubmit: SubmitHandler<IChangePassword> = async (data: IChangePassword) => {
+    if (data.password !== data.repeatPassword) {
+      setError('repeatPassword', { message: '비밀번호가 동일하지 않습니다' }, { shouldFocus: true });
+    }
+
+    setOpen(false);
+
+    try {
+      await putChangePassword(data);
+      Swal.fire({
+        icon: 'success',
+        title: '비밀번호가 변경되었습니다',
+        text: '다시 로그인을 해주세요',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await postLogout();
+          router.replace('/');
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   console.log(currentUser);
   return (
     <>
@@ -64,7 +165,7 @@ const Info = () => {
                 <span>아이디</span>
                 <span>{currentUser.data.userId}</span>
               </div>
-              <button>비밀번호 변경</button>
+              <button onClick={onClickChangePassword}>비밀번호 변경</button>
             </InfoColumn>
             <InfoColumn>
               <div className="infoData">
@@ -105,6 +206,34 @@ const Info = () => {
                 </div>
               </InfoColumn>
             )}
+            <Modal
+              open={open}
+              onClose={onClickModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <ModalContainer>
+                <div className="inner">
+                  <div className="top">
+                    <h2>비밀번호 변경</h2>
+                    <IoCloseOutline onClick={onClickModal} size="1.2rem" />
+                  </div>
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="container">
+                      <label>변경 비밀번호</label>
+                      <input {...register('password', { required: '비밀번호를 입력하세요' })} type="password" />
+                    </div>
+                    <span>{errors?.password?.message}</span>
+                    <div className="container">
+                      <label>변경 비밀번호 확인</label>
+                      <input {...register('repeatPassword', { required: '다시 한번 입력해주세요' })} type="password" />
+                    </div>
+                    <span>{errors?.repeatPassword?.message}</span>
+                    <button type="submit">변경하기</button>
+                  </form>
+                </div>
+              </ModalContainer>
+            </Modal>
           </ExtendsStatusContainer>
         </Container>
       </Layout>

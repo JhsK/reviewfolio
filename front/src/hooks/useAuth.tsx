@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { getUser } from 'src/api';
 import ContextUser from 'src/store';
-import { IContextUser } from 'src/types';
 
 const useAuth = () => {
   const currentUser = useContext(ContextUser);
@@ -14,6 +13,7 @@ const useAuth = () => {
         currentUser.setData(data);
       } catch (error) {
         console.error(error);
+        currentUser.setLogout();
       }
     };
     fetchData();

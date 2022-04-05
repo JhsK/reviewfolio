@@ -44,6 +44,7 @@ export interface IContextUser {
   data: ICurrentUser;
   isAuthenticate: boolean;
   setData: (param: ICurrentUser) => void;
+  setLogout: () => void;
 }
 
 interface IAssociateUser extends Model {
