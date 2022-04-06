@@ -170,12 +170,22 @@ const Info = () => {
               </div>
               <button onClick={onClickChangePassword}>비밀번호 변경</button>
             </InfoColumn>
-            <InfoColumn>
-              <div className="infoData">
-                <span>티켓</span>
-                <span>{currentUser.data.ticket}</span>
-              </div>
-            </InfoColumn>
+            {currentUser.data.position === 'student' ? (
+              <InfoColumn>
+                <div className="infoData">
+                  <span>티켓</span>
+                  <span>{currentUser.data.ticket}</span>
+                </div>
+              </InfoColumn>
+            ) : (
+              <InfoColumn>
+                <div className="infoData">
+                  <span>포인트</span>
+                  <span>{currentUser.data.point}</span>
+                </div>
+                <button onClick={onClickUpdateInfo}>정산하기</button>
+              </InfoColumn>
+            )}
             <InfoColumn>
               <div className="infoData">
                 <span>이름</span>
@@ -205,7 +215,7 @@ const Info = () => {
               <InfoColumn>
                 <div className="infoData">
                   <span>경력</span>
-                  <span>{currentUser.data.career}</span>
+                  <span>{`${currentUser.data.career}년차`}</span>
                 </div>
               </InfoColumn>
             )}

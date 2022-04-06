@@ -10,6 +10,7 @@ import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { Banner, Hr, Input } from 'src/components/style';
+import { BANK } from 'src/schema';
 import { FormInput, JoinInput } from 'src/types';
 
 const BannerContainer = styled.div`
@@ -229,21 +230,47 @@ const SignUp = () => {
             </Select>
           </div>
           {position === 'programmer' && (
-            <div className="article">
-              <label htmlFor="career">년차</label>
-              <Input
-                {...register('career', {
-                  required: validationMessage.required,
-                  min: { value: 0, message: validationMessage.range },
-                  max: { value: 20, message: validationMessage.range },
-                  pattern: { value: /^[0-9]+$/, message: validationMessage.notString },
-                })}
-                type="text"
-                name="career"
-                id="career"
-              />
-              <span className="error">{errors?.career?.message}</span>
-            </div>
+            <>
+              <div className="article">
+                <label htmlFor="career">년차</label>
+                <Input
+                  {...register('career', {
+                    required: validationMessage.required,
+                    min: { value: 0, message: validationMessage.range },
+                    max: { value: 20, message: validationMessage.range },
+                    pattern: { value: /^[0-9]+$/, message: validationMessage.notString },
+                  })}
+                  type="text"
+                  name="career"
+                  id="career"
+                />
+                <span className="error">{errors?.career?.message}</span>
+              </div>
+              <div className="article">
+                <label htmlFor="bank">은행</label>
+                <Select id="bank" {...register('bank', { required: validationMessage.required })} sx={{ width: '40%' }}>
+                  {BANK.map((bank) => (
+                    <MenuItem value={bank} key={bank}>
+                      {bank}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <span className="error">{errors?.career?.message}</span>
+              </div>
+              <div className="article">
+                <label htmlFor="accountNumber">계좌번호</label>
+                <Input
+                  {...register('accountNumber', {
+                    required: validationMessage.required,
+                    pattern: { value: /^[0-9]+$/, message: validationMessage.notString },
+                  })}
+                  type="text"
+                  name="accountNumber"
+                  id="accountNumber"
+                />
+                <span className="error">{errors?.accountNumber?.message}</span>
+              </div>
+            </>
           )}
           <div className="btnContainer">
             <button type="submit">회원가입</button>

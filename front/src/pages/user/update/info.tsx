@@ -21,13 +21,31 @@ const UpdateColumn = styled(InfoColumn)`
   width: 100%;
   display: block;
 
-  span {
-    width: 35%;
-  }
-
   input {
     width: 40%;
   }
+`;
+
+const Button = styled.button`
+  border: none;
+  color: rgb(173, 181, 189);
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #fff;
+  padding: 0;
+  margin: 2rem 0;
+  cursor: pointer;
+
+  &:hover {
+    color: #000;
+  }
+`;
+
+const ErrorLabel = styled.span`
+  font-size: 0.9rem;
+  color: red;
+  margin-bottom: 1rem;
+  display: block;
 `;
 
 const UpdateInfo = () => {
@@ -69,11 +87,11 @@ const UpdateInfo = () => {
                   />
                 </div>
               </UpdateColumn>
+              <ErrorLabel>{errors?.userName?.message}</ErrorLabel>
               <UpdateColumn>
                 <div className="infoData">
                   <span>직종</span>
                   <Select
-                    // id="job"
                     defaultValue={currentUser.data.job}
                     {...register('job', { required: '필수 항목입니다' })}
                     sx={{ width: '40%' }}
@@ -87,15 +105,28 @@ const UpdateInfo = () => {
                   </Select>
                 </div>
               </UpdateColumn>
+              <ErrorLabel>{errors?.job?.message}</ErrorLabel>
               {currentUser.data.position === 'programmer' && (
-                <InfoColumn>
-                  <div className="infoData">
-                    <span>경력</span>
-                    <span>{currentUser.data.career}</span>
-                  </div>
-                </InfoColumn>
+                <>
+                  <InfoColumn>
+                    <div className="infoData">
+                      <span>경력</span>
+                      <Input
+                        type="text"
+                        {...register('career', {
+                          required: '필수항목 입니다',
+                          min: { value: 0, message: '숫자만 가능합니다' },
+                          max: { value: 20, message: '숫자만 가능합니다' },
+                          pattern: { value: /^[0-9]+$/, message: '숫자만 가능합니다' },
+                        })}
+                        defaultValue={currentUser.data.career}
+                      />
+                    </div>
+                  </InfoColumn>
+                  <ErrorLabel>{errors?.career?.message}</ErrorLabel>
+                </>
               )}
-              <button type="submit">수정</button>
+              <Button type="submit">수정</Button>
             </form>
           </StatusContainer>
         </Container>

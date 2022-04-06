@@ -6,6 +6,8 @@ export interface FormInput {
   userPassword: string;
   rePassword: string;
   career?: number;
+  bank?: string;
+  accountNumber: number;
 }
 
 export interface JoinInput extends FormInput {

@@ -1,3 +1,4 @@
+import axios, { AxiosRequestConfig } from 'axios';
 import bcrypt from 'bcrypt';
 import express from 'express';
 import passport from 'passport';
@@ -15,6 +16,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     });
     user.career = programmerData?.career;
     user.programmerId = programmerData?.id;
+    user.point = programmerData?.point;
   }
   delete user.password;
   console.log(user);
@@ -22,6 +24,8 @@ router.get('/', isLoggedIn, async (req, res) => {
 });
 
 router.post('/', async (req, res, next) => {
+  const encodeedKey = await Buffer.from(`${process.env.TOSS_SECRET_KEY}:`, 'utf8').toString('base64');
+
   try {
     const exUser = await User.findOne({
       where: {
@@ -46,8 +50,34 @@ router.post('/', async (req, res, next) => {
       await Programmer.create({
         UserId: newUser.id,
         career: req.body.career,
+        bank: req.body.bank,
+        accountNumber: req.body.accountNumber,
+        subMallId: `reviewfolio${req.body.userId}`,
       });
     }
+
+    const subMallData = {
+      subMallId: `reviewfolio${req.body.userId}`,
+      companyName: `reviewfolio${req.body.userId}`,
+      representativeName: req.body.userName,
+      businessNumber: '0000000000',
+      account: {
+        bank: req.body.bank,
+        accountNumber: req.body.accountNumber,
+      },
+    };
+
+    const config: AxiosRequestConfig = {
+      method: 'POST',
+      url: 'https://api.tosspayments.com/v1/payouts/sub-malls',
+      headers: {
+        Authorization: `Basic ${encodeedKey}`,
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify(subMallData),
+    };
+
+    const { data: apiResult } = await axios(config);
     return res.status(200).json(newUser);
   } catch (err) {
     console.error(err);
@@ -127,6 +157,10 @@ router.put('/change-password', isLoggedIn, async (req, res, next) => {
 
 router.put('/change-info', isLoggedIn, async (req, res, next) => {
   try {
+    const user = await User.findOne({
+      where: { id: req.user?.id },
+    });
+
     const newUser = await User.update(
       {
         userName: req.body.userName,
@@ -136,6 +170,17 @@ router.put('/change-info', isLoggedIn, async (req, res, next) => {
         where: { id: req.user?.id },
       },
     );
+
+    if (user?.position === 'programmer') {
+      await Programmer.update(
+        {
+          career: req.body.career,
+        },
+        {
+          where: { UserId: req.user?.id },
+        },
+      );
+    }
 
     return res.json(newUser);
   } catch (error) {

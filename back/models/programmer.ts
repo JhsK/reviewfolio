@@ -7,9 +7,12 @@ class Programmer extends Model {
   public career!: number;
   public point!: number;
   public refundPoint!: number;
+  public subMallId!: string;
+  public bank!: string;
+  public accountNumber!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  
+
   public UserId?: number;
 }
 
@@ -25,6 +28,15 @@ Programmer.init(
     refundPoint: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
+    },
+    subMallId: {
+      type: DataTypes.STRING(100),
+    },
+    bank: {
+      type: DataTypes.STRING(50),
+    },
+    accountNumber: {
+      type: DataTypes.STRING(100),
     },
   },
   {
