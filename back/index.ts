@@ -11,6 +11,7 @@ import applicationRouter from './routes/application';
 import commentRouter from './routes/comment';
 import orderRouter from './routes/order';
 import postRouter from './routes/post';
+import calculateRouter from './routes/submall';
 import userRouter from './routes/user';
 
 dotenv.config();
@@ -57,6 +58,7 @@ app.use('/post', postRouter);
 app.use('/application', applicationRouter);
 app.use('/comment', commentRouter);
 app.use('/order', orderRouter);
+app.use('/submall', calculateRouter);
 
 app.get('/', (req: Request, res: Response, next: NextFunction) => {
   res.send('서버 실행 중');

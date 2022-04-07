@@ -54,30 +54,31 @@ router.post('/', async (req, res, next) => {
         accountNumber: req.body.accountNumber,
         subMallId: `reviewfolio${req.body.userId}`,
       });
+
+      const subMallData = {
+        subMallId: `reviewfolio${req.body.userId}`,
+        companyName: `reviewfolio${req.body.userId}`,
+        representativeName: req.body.userName,
+        businessNumber: '0000000000',
+        account: {
+          bank: req.body.bank,
+          accountNumber: req.body.accountNumber,
+        },
+      };
+  
+      const config: AxiosRequestConfig = {
+        method: 'POST',
+        url: 'https://api.tosspayments.com/v1/payouts/sub-malls',
+        headers: {
+          Authorization: `Basic ${encodeedKey}`,
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify(subMallData),
+      };
+  
+      const { data: apiResult } = await axios(config);
     }
 
-    const subMallData = {
-      subMallId: `reviewfolio${req.body.userId}`,
-      companyName: `reviewfolio${req.body.userId}`,
-      representativeName: req.body.userName,
-      businessNumber: '0000000000',
-      account: {
-        bank: req.body.bank,
-        accountNumber: req.body.accountNumber,
-      },
-    };
-
-    const config: AxiosRequestConfig = {
-      method: 'POST',
-      url: 'https://api.tosspayments.com/v1/payouts/sub-malls',
-      headers: {
-        Authorization: `Basic ${encodeedKey}`,
-        'Content-Type': 'application/json',
-      },
-      data: JSON.stringify(subMallData),
-    };
-
-    const { data: apiResult } = await axios(config);
     return res.status(200).json(newUser);
   } catch (err) {
     console.error(err);
