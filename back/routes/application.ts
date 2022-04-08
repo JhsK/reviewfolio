@@ -63,6 +63,19 @@ router.put('/', isLoggedIn, async (req, res, next) => {
       },
     );
 
+    const programmer = await Programmer.findOne({
+      where: { id: req.body.programmerId },
+    });
+
+    await Programmer.update(
+      {
+        point: programmer?.point! + 15000,
+      },
+      {
+        where: { id: req.body.programmerId },
+      },
+    );
+
     return res.json(update);
   } catch (error) {
     console.error(error);

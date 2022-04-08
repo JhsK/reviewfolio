@@ -81,7 +81,7 @@ const CommentForm = ({ id, position, activeApplicant }) => {
     <>
       <ToastContainer />
       <InputContainer onSubmit={onSubmitComment}>
-        <textarea onChange={onChangeChat} />
+        <textarea value={chat} onChange={onChangeChat} />
         <button type="submit">전송</button>
       </InputContainer>
     </>

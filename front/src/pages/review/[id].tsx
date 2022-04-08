@@ -151,10 +151,10 @@ const Review = () => {
               },
             },
           );
+          Swal.fire('리뷰가 종료되었습니다', '포린트 15000원이 적립되었습니다', 'success');
         } catch (error) {
           console.error(error);
         }
-        Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
       }
     });
   };
