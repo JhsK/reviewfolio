@@ -123,7 +123,17 @@ const SignUp = () => {
       await postSignUp(values);
       router.replace('/');
     } catch (error) {
+      console.log(error.response);
       console.error(error);
+      toast.error(error.response.data, {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
 
     return null;

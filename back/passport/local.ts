@@ -17,7 +17,7 @@ export default () => {
         if (result) {
           return done(null, user);
         }
-        return done(null, false, { message: '비밀번호가 틀립니다.' });
+        return done(null, false, { message: '비밀번호를 확인해주세요' });
       } catch (err) {
         console.error(err);
         return done(err);

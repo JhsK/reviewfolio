@@ -32,8 +32,18 @@ router.post('/', async (req, res, next) => {
         userId: req.body.userId,
       },
     });
-    if (exUser) {
-      return res.status(403).send('이미 사용 중인 아이디입니다');
+
+    const nickUser = await User.findOne({
+      where: {
+        nickname: req.body.nickname,
+      },
+    });
+    if (exUser ) {
+      return res.status(403).json('이미 사용 중인 아이디입니다');
+    }
+
+    if (nickUser) {
+      return res.status(403).json('이미 사용 중인 닉네임입니다');
     }
     const hashedPassword = await bcrypt.hash(req.body.userPassword, 10);
     const newUser = await User.create({
@@ -44,6 +54,7 @@ router.post('/', async (req, res, next) => {
       career: req.body.career,
       position: req.body.position,
       job: req.body.job,
+      birthday: req.body.birthday,
     });
 
     if (req.body.position === 'programmer') {
@@ -65,7 +76,7 @@ router.post('/', async (req, res, next) => {
           accountNumber: req.body.accountNumber,
         },
       };
-  
+
       const config: AxiosRequestConfig = {
         method: 'POST',
         url: 'https://api.tosspayments.com/v1/payouts/sub-malls',
@@ -75,7 +86,7 @@ router.post('/', async (req, res, next) => {
         },
         data: JSON.stringify(subMallData),
       };
-  
+
       const { data: apiResult } = await axios(config);
     }
 

@@ -9,6 +9,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { LoginInput } from 'src/types';
 import { postSignIn } from 'src/api';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const Container = styled.div`
   width: 100%;
@@ -60,6 +61,15 @@ const SignIn = () => {
       router.back();
     } catch (error) {
       console.error(error);
+      toast.error(error.response.data, {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
