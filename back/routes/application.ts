@@ -67,6 +67,23 @@ router.put('/', isLoggedIn, async (req, res, next) => {
       where: { id: req.body.programmerId },
     });
 
+    const application = await Application.findOne({
+      where: { id: req.body.applicationId },
+    });
+
+    const requestPost = await RequestPost.findOne({
+      where: { id: application?.id },
+    });
+
+    await RequestPost.update(
+      {
+        status: 'end',
+      },
+      {
+        where: { id: requestPost?.id },
+      },
+    );
+
     await Programmer.update(
       {
         point: programmer?.point! + 15000,

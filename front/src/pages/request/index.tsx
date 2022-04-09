@@ -79,6 +79,18 @@ const Request = () => {
         progress: undefined,
       });
     }
+
+    if (!(fileList.length > 0)) {
+      return toast.error('파일을 업로드 해주세요', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     const values = { ...data, files: filePath };
 
     if (reviewer > currentUser.data.ticket) {

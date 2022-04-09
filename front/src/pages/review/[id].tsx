@@ -167,8 +167,6 @@ const Review = () => {
     return <span>[리뷰 종료]</span>;
   }, [activeApplicant]);
 
-  console.log(applicant);
-
   return (
     <Layout>
       <Header />
