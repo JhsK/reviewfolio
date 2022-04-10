@@ -16,7 +16,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
       tossOrderId: req.body.orderId,
       orderNickName: req.body.nickname,
       paymentKey: req.body.paymentKey,
-      amount: req.body.amount,
+      amount: Number(req.body.amount),
       num: req.body.num,
       UserId: req.user?.id,
     });
@@ -27,7 +27,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 
     await User.update(
       {
-        ticket: user?.ticket + req.body.num,
+        ticket: user?.ticket! + Number(req.body.num),
       },
       {
         where: { id: req.user?.id },

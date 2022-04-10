@@ -7,11 +7,12 @@ import { IoPersonSharp } from 'react-icons/io5';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getPostDetail, postApplication } from 'src/api';
+import { deleteRequesDelete, getPostDetail, postApplication } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { FileContainer, RequestFormFooter } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
+import Swal from 'sweetalert2';
 
 interface IFileContainer {
   isInputProp: boolean;
@@ -100,7 +101,6 @@ const RequestDetail = () => {
           },
         },
       );
-      // await postApplication({ id });
     } catch (error) {
       console.error(error);
     }
@@ -108,6 +108,15 @@ const RequestDetail = () => {
     return null;
   };
 
+  const onClickDeleteRequest = async () => {
+    try {
+      await deleteRequesDelete(id as string);
+      Swal.fire('삭제 완료', '리뷰 요청글이 삭제되었습니다', 'success');
+      router.replace('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   console.log(data);
   return (
     <Layout>
@@ -150,6 +159,20 @@ const RequestDetail = () => {
             <Box mr={1}>
               <Button onClick={() => router.back()} size="large" variant="outlined">
                 목록
+              </Button>
+            </Box>
+          </ButtonContainer>
+        )}
+        {currentUser.data.id === data.User.id && (
+          <ButtonContainer>
+            <Box mr={1}>
+              <Button size="large" onClick={() => router.push(`/request/${id}/update`)} variant="contained">
+                수정
+              </Button>
+            </Box>
+            <Box mr={1}>
+              <Button onClick={onClickDeleteRequest} size="large" variant="outlined">
+                삭제
               </Button>
             </Box>
           </ButtonContainer>

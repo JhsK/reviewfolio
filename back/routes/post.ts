@@ -57,6 +57,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
+  console.log(req.body);
   try {
     const newPost = await RequestPost.create({
       title: req.body.title,
@@ -84,7 +85,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
 
     await User.update(
       {
-        ticket: (findUser?.ticket as number) - req.body.maxReviewer,
+        ticket: (findUser?.ticket as number) - req.body.reviewer,
       },
       {
         where: { id: req.user?.id },

@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { postBuyTicket } from 'src/api';
+import { getUser, postBuyTicket } from 'src/api';
+import ContextUser from 'src/store';
 import useAuth from './useAuth';
 
 const usePayment = (query) => {
-  const currentUser = useAuth();
+  const currentUser = useContext(ContextUser);
+  // const currentUser = useAuth();
   console.log(query);
   useEffect(() => {
     if (query.hasOwnProperty('result')) {
@@ -13,6 +15,8 @@ const usePayment = (query) => {
           (async () => {
             const values = { ...query, nickname: currentUser.data.nickname };
             await postBuyTicket(values);
+            const { data } = await getUser();
+            currentUser.setData(data);
             window.history.replaceState({}, document.title, '/');
             toast.success('결제에 성공했습니다', {
               position: 'top-right',

@@ -7,6 +7,8 @@ export const getUser = () => API.get<ICurrentUser>('/user');
 export const postLogout = () => API.post('/user/logout');
 
 export const postRequestCreate = (params) => API.post('/post', params);
+export const putRequestUpdate = (params) => API.put('/post', params);
+export const deleteRequesDelete = (id: string) => API.delete(`/post/${id}`);
 export const postFilesUpload = async (params: FormData) => {
   const { data } = await API.post<string[]>('/post/files', params);
   return data;

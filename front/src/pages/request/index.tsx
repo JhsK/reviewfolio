@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
 import styled from '@emotion/styled';
-import Header from 'src/components/Header';
-import Layout from 'src/components/Layout';
-import { Box, Button, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
+import { Box, Button, MenuItem, Select, SelectChangeEvent, Stack, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoCloseCircleSharp } from 'react-icons/io5';
-import { postFilesUpload, postRequestCreate } from 'src/api';
-import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { postFilesUpload, postRequestCreate } from 'src/api';
+import Header from 'src/components/Header';
+import Layout from 'src/components/Layout';
 import { FileContainer } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
 import Swal from 'sweetalert2';
@@ -55,9 +55,10 @@ const Request = () => {
   const [reivewType, setReviewType] = useState('');
   const currentUser = useAuth();
   const router = useRouter();
+  console.log('resqwfd', currentUser);
 
   useEffect(() => {
-    if (currentUser.data.ticket < 1) {
+    if (currentUser.isAuthenticate && currentUser.data.ticket < 1) {
       Swal.fire({
         title: '티켓이 부족합니다',
         icon: 'error',
@@ -65,7 +66,7 @@ const Request = () => {
         router.replace('/');
       });
     }
-  }, [currentUser.data]);
+  }, [currentUser]);
 
   const onSubmit = async (data) => {
     if (reviewer === '' || reivewType === '') {

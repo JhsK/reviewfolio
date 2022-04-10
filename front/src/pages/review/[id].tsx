@@ -152,6 +152,7 @@ const Review = () => {
             },
           );
           Swal.fire('리뷰가 종료되었습니다', '포린트 15000원이 적립되었습니다', 'success');
+          router.push('/user/status');
         } catch (error) {
           console.error(error);
         }
