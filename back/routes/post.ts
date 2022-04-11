@@ -123,7 +123,6 @@ router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => {
 });
 
 router.get('/:id', async (req, res, next) => {
-  console.log(req.params.id);
   try {
     const post = await RequestPost.findOne({
       where: { id: req.params.id },

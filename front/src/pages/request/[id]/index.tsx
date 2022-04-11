@@ -170,11 +170,13 @@ const RequestDetail = () => {
                 수정
               </Button>
             </Box>
-            <Box mr={1}>
-              <Button onClick={onClickDeleteRequest} size="large" variant="outlined">
-                삭제
-              </Button>
-            </Box>
+            {data.Applications.length === 0 && (
+              <Box mr={1}>
+                <Button onClick={onClickDeleteRequest} size="large" variant="outlined">
+                  삭제
+                </Button>
+              </Box>
+            )}
           </ButtonContainer>
         )}
       </Container>
