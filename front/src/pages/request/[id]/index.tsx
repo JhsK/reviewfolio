@@ -163,7 +163,7 @@ const RequestDetail = () => {
             </Box>
           </ButtonContainer>
         )}
-        {currentUser.data.id === data.User.id && (
+        {currentUser.data.id === data?.User.id && (
           <ButtonContainer>
             <Box mr={1}>
               <Button size="large" onClick={() => router.push(`/request/${id}/update`)} variant="contained">

@@ -136,6 +136,7 @@ const Request = () => {
 
     try {
       const returnPath = await postFilesUpload(formData);
+      console.log(returnPath);
       fileObj.forEach((file) => setFileList((prev) => [...prev, file.name]));
       setFilePath(returnPath);
     } catch (error) {

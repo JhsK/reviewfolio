@@ -57,7 +57,6 @@ router.get('/', async (req, res, next) => {
 });
 
 router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
-  console.log(req.body);
   try {
     const newPost = await RequestPost.create({
       title: req.body.title,
@@ -99,12 +98,32 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => {
   }
 });
 
+router.put('/', isLoggedIn, upload.none(), async (req, res, next) => {
+  console.log(req.body);
+  try {
+    const updatePost = await RequestPost.update(
+      {
+        title: req.body.title,
+        body: req.body.body,
+      },
+      {
+        where: { id: req.body.requestPostId },
+      },
+    );
+    return res.json(updatePost);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 router.post('/files', isLoggedIn, upload.array('files'), (req, res, next) => {
   console.log(req.files);
   res.json((req.files as Express.Multer.File[]).map((v) => v.filename));
 });
 
 router.get('/:id', async (req, res, next) => {
+  console.log(req.params.id);
   try {
     const post = await RequestPost.findOne({
       where: { id: req.params.id },

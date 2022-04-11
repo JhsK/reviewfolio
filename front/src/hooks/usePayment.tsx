@@ -6,7 +6,6 @@ import useAuth from './useAuth';
 
 const usePayment = (query) => {
   const currentUser = useContext(ContextUser);
-  // const currentUser = useAuth();
   console.log(query);
   useEffect(() => {
     if (query.hasOwnProperty('result')) {

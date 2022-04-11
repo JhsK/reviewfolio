@@ -13,9 +13,9 @@ const RequestStatus = () => {
   const onClickDetail = (request: IRequestPost) => {
     if (request.status === 'recurit') {
       router.push(`/request/${request.id}`);
+    } else {
+      router.push(`/review/${request.id}`);
     }
-
-    router.push(`/review/${request.id}`);
   };
 
   return (
