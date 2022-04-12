@@ -76,15 +76,6 @@ const Header = () => {
     setOpen(false);
   };
 
-  function handleListKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  }
-
   // return focus to the button when we transitioned from !open -> open
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -129,13 +120,15 @@ const Header = () => {
                   <a>신청하기</a>
                 </Link>
               ) : (
-                <Link href="/request">
-                  <a>요청하기</a>
-                </Link>
+                <>
+                  <Link href="/request">
+                    <a>요청하기</a>
+                  </Link>
+                  <Link href="/payment">
+                    <a>결제하기</a>
+                  </Link>
+                </>
               )}
-              <Link href="/payment">
-                <a>결제하기</a>
-              </Link>
               <Button
                 ref={anchorRef}
                 id="composition-button"

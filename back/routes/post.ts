@@ -163,6 +163,7 @@ router.delete('/:id', isLoggedIn, async (req, res, next) => {
 router.get('/user/request', isLoggedIn, async (req, res, next) => {
   const requestList = await RequestPost.findAll({
     where: { UserId: req.user?.id },
+    order: [['createdAt', 'DESC']],
     include: [
       {
         model: Application,

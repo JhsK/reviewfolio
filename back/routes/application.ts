@@ -104,6 +104,7 @@ router.get('/user/:programmerId', async (req, res, next) => {
   try {
     const applicationList = await Application.findAll({
       where: { ProgrammerId: req.params.programmerId },
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: RequestPost,
