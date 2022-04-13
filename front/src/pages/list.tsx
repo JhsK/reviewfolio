@@ -1,14 +1,11 @@
 import styled from '@emotion/styled';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import Fab from '@mui/material/Fab';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { IoPersonSharp } from 'react-icons/io5';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Header from 'src/components/Header';
-import Layout from 'src/components/Layout';
 import { useQuery } from 'react-query';
 import { getPostsList } from 'src/api';
-import Link from 'next/link';
+import Header from 'src/components/Header';
+import Layout from 'src/components/Layout';
 import { RequestFormFooter } from 'src/components/style';
 
 const Container = styled.div`
@@ -16,6 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 2rem 0;
 `;
 
 const PostContainer = styled.div`
@@ -24,7 +22,7 @@ const PostContainer = styled.div`
   border-radius: 10px;
   padding: 1rem 1.5rem;
   opacity: 0.7;
-  margin-top: 4rem;
+  margin-bottom: 4rem;
 
   a {
     cursor: pointer;
@@ -53,24 +51,32 @@ const PostContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  position: absolute;
-  left: 29%;
+  width: 66%;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.3rem;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+
+  span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-bottom: 2px solid #007fff;
+    padding-bottom: 0.5rem;
+    cursor: pointer;
+  }
 `;
 
 const List = () => {
   const { data } = useQuery(['posts'], getPostsList);
-  const [filter, setFilter] = useState(true);
 
-  console.log(data);
   return (
     <Layout>
       <Header />
+      {/* <FilterContainer>
+        <span>최신순</span>
+      </FilterContainer> */}
       <Container>
         <FilterContainer>
-          <Fab variant="extended" onClick={(value) => setFilter(!value)}>
-            {filter ? <ArrowDropUpIcon sx={{ mr: 1 }} /> : <ArrowDropDownIcon sx={{ mr: 1 }} />}
-            날짜순
-          </Fab>
+          <span>최신순</span>
         </FilterContainer>
         {data &&
           data.map((post) => (
