@@ -40,6 +40,7 @@ export interface ICurrentUser extends Model {
   point?: number;
   refundPoint?: number;
   programmerId?: number;
+  checked?: boolean;
 }
 
 export interface IContextUser {

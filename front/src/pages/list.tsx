@@ -71,9 +71,6 @@ const List = () => {
   return (
     <Layout>
       <Header />
-      {/* <FilterContainer>
-        <span>최신순</span>
-      </FilterContainer> */}
       <Container>
         <FilterContainer>
           <span>최신순</span>

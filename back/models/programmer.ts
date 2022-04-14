@@ -1,5 +1,6 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, HasManyAddAssociationMixin, Model } from 'sequelize';
 import { dbType } from '.';
+import Image from './image';
 import sequelize from './sequelize';
 
 class Programmer extends Model {
@@ -10,10 +11,12 @@ class Programmer extends Model {
   public subMallId!: string;
   public bank!: string;
   public accountNumber!: string;
+  public checked!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
   public UserId?: number;
+  public addImage!: HasManyAddAssociationMixin<Image, number>;
 }
 
 Programmer.init(
@@ -38,6 +41,10 @@ Programmer.init(
     accountNumber: {
       type: DataTypes.STRING(100),
     },
+    checked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    }
   },
   {
     sequelize,
@@ -52,6 +59,7 @@ export const associate = (db: dbType) => {
   db.Programmer.belongsTo(db.User);
   db.Programmer.belongsToMany(db.RequestPost, { through: 'RequestReview' });
   db.Programmer.hasMany(db.Application, { as: 'Applications' });
+  db.Programmer.hasMany(db.Image);
 };
 
 export default Programmer;

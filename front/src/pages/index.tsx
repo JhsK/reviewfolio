@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Button from '@mui/material/Button';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { postLogout } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
@@ -12,6 +12,7 @@ import Layout from 'src/components/Layout';
 import { Hr } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
 import usePayment from 'src/hooks/usePayment';
+import Swal from 'sweetalert2';
 
 const Container = styled.div`
   width: 100%;
@@ -55,6 +56,26 @@ const Home = () => {
   const router = useRouter();
   const currentUser = useAuth();
   usePayment(router.query);
+
+  useEffect(() => {
+    if (!currentUser.data.checked) {
+      Swal.fire({
+        title: '현업자 검증이 되지 않았습니다',
+        text: '2~3일 정도 소요됩니다',
+        icon: 'error',
+        showCancelButton: false,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: '확인',
+      }).then(async (result) => {
+        try {
+          await postLogout();
+          router.reload();
+        } catch (error) {
+          console.error(error);
+        }
+      });
+    }
+  }, [currentUser.data]);
 
   const onClickLogout = async () => {
     try {

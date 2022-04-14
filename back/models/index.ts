@@ -1,6 +1,7 @@
 import Application, { associate as associateApplication } from './application';
 import Comment, { associate as associateComment } from './comment';
 import File, { associate as associateFile } from './file';
+import Image, { associate as associateImage } from './image';
 import Order, { associate as associateOrder } from './order';
 import Payment, { associate as associatePayment } from './payment';
 import Programmer, { associate as associateProgrammer } from './programmer';
@@ -19,6 +20,7 @@ const db = {
   Application,
   Comment,
   Order,
+  Image,
 }
 
 export type dbType = typeof db;
@@ -32,3 +34,4 @@ associateFile(db);
 associateApplication(db);
 associateComment(db);
 associateOrder(db);
+associateImage(db);

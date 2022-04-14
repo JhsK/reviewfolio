@@ -33,6 +33,7 @@ const ContextProvider = (props) => {
       ticket: null,
       point: null,
       refundPoint: null,
+      checked: true,
     },
     isAuthenticate: false,
     setData,

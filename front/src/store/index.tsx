@@ -14,6 +14,7 @@ const ContextUser = createContext<IContextUser>({
     ticket: 0,
     point: 0,
     refundPoint: 0,
+    checked: true,
   },
   isAuthenticate: false,
   setData: (param: ICurrentUser) => {},

@@ -38,7 +38,7 @@ router.post('/', async (req, res, next) => {
         nickname: req.body.nickname,
       },
     });
-    if (exUser ) {
+    if (exUser) {
       return res.status(403).json('이미 사용 중인 아이디입니다');
     }
 
