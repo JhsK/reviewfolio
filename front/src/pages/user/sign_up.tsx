@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEvent } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { postSignUp } from 'src/api';
+import { postImage, postSignUp } from 'src/api';
 import Footer from 'src/components/Footer';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
@@ -13,13 +13,17 @@ import { Banner, Hr, Input } from 'src/components/style';
 import { BANK } from 'src/schema';
 import { FormInput, JoinInput } from 'src/types';
 
+interface FormFileProps {
+  isView: boolean;
+}
+
 const BannerContainer = styled.div`
   width: 100%;
   height: 250px;
   background-color: #e4f7fd;
 `;
 
-const Form = styled.form`
+const Form = styled.form<FormFileProps>`
   display: flex;
   flex-direction: column;
   padding: 2rem 0;
@@ -34,6 +38,10 @@ const Form = styled.form`
     margin-top: 2rem;
     display: flex;
     flex-direction: column;
+
+    .file {
+      display: ${(props) => (props.isView ? 'none' : null)};
+    }
 
     .radio {
       span {
@@ -94,11 +102,34 @@ const SignUp = () => {
     formState: { errors },
   } = useForm<FormInput>();
   const router = useRouter();
+  const imageRef = useRef(null);
   const [selectJob, setSelectJob] = useState('직무를 선택해주세요');
   const [position, setPosition] = useState('student');
+  const [imagePath, setImagePath] = useState('');
+  const [isView, setIsView] = useState(true);
 
   const onChangeJob = (e: SelectChangeEvent) => {
     setSelectJob(e.target.value);
+  };
+
+  const attachImage = () => {
+    imageRef.current.click();
+  };
+
+  const imageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+    const imageObj = Array.from(e.target.files);
+    console.log(imageObj);
+
+    formData.append('image', imageObj[0]);
+
+    try {
+      const returnPath = await postImage(formData);
+      setImagePath(returnPath);
+      setIsView(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onSubmit: SubmitHandler<FormInput> = async (data: FormInput) => {
@@ -117,7 +148,7 @@ const SignUp = () => {
       setError('userPassword', { message: validationMessage.passwordConfirmation }, { shouldFocus: true });
     }
 
-    const values: JoinInput = { ...data, job: selectJob, position };
+    const values: JoinInput = { ...data, job: selectJob, position, image: imagePath };
 
     try {
       await postSignUp(values);
@@ -152,7 +183,7 @@ const SignUp = () => {
         </Banner>
       </BannerContainer>
       <Layout>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form isView={isView} onSubmit={handleSubmit(onSubmit)}>
           <span className="title">개인 정보</span>
           <div className="article">
             <div className="radio">
@@ -279,6 +310,11 @@ const SignUp = () => {
                   id="accountNumber"
                 />
                 <span className="error">{errors?.accountNumber?.message}</span>
+              </div>
+              <div className="article">
+                <label>사원증</label>
+                {isView && <Input type="button" value="첨부하기" onClick={attachImage} />}
+                <input ref={imageRef} accept="image/*" onChange={imageUpload} className="file" type="file" />
               </div>
             </>
           )}

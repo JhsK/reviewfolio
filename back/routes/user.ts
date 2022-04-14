@@ -1,12 +1,38 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import bcrypt from 'bcrypt';
 import express from 'express';
+import fs from 'fs';
+import multer from 'multer';
 import passport from 'passport';
+import path from 'path';
+import Image from '../models/image';
 import Programmer from '../models/programmer';
 import User from '../models/user';
 import { isLoggedIn, isNotLoggedIn } from './middleware';
 
 const router = express.Router();
+
+try {
+  fs.accessSync('uploads');
+} catch (error) {
+  console.log('uploads 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('uploads');
+}
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      done(null, 'uploads');
+    },
+    filename(req, file, done) {
+      // 제로초.png
+      const ext = path.extname(file.originalname); // 확장자 추출(.png)
+      const basename = path.basename(file.originalname, ext); // 제로초
+      done(null, basename + '_' + new Date().getTime() + ext); // 제로초15184712891.png
+    },
+  }),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 20MB
+});
 
 router.get('/', isLoggedIn, async (req, res) => {
   const user = req.user?.toJSON();
@@ -23,7 +49,7 @@ router.get('/', isLoggedIn, async (req, res) => {
   return res.json(user);
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', upload.none(), async (req, res, next) => {
   const encodeedKey = await Buffer.from(`${process.env.TOSS_SECRET_KEY}:`, 'utf8').toString('base64');
 
   try {
@@ -58,13 +84,18 @@ router.post('/', async (req, res, next) => {
     });
 
     if (req.body.position === 'programmer') {
-      await Programmer.create({
+      const newProgrammer = await Programmer.create({
         UserId: newUser.id,
         career: req.body.career,
         bank: req.body.bank,
         accountNumber: req.body.accountNumber,
         subMallId: `reviewfolio${req.body.userId}`,
       });
+
+      if (req.body.image) {
+        const createImage = await Image.create({ src: req.body.image });
+        await newProgrammer.addImage(createImage);
+      }
 
       const subMallData = {
         subMallId: `reviewfolio${req.body.userId}`,
@@ -95,6 +126,11 @@ router.post('/', async (req, res, next) => {
     console.error(err);
     next(err);
   }
+});
+
+router.post('/image', upload.single('image'), (req, res, next) => {
+  console.log(req.file);
+  res.json((req.file as Express.Multer.File).filename);
 });
 
 router.post('/login', isNotLoggedIn, (req, res, next) => {

@@ -6,6 +6,11 @@ export const postSignIn = (params) => API.post('/user/login', params);
 export const getUser = () => API.get<ICurrentUser>('/user');
 export const postLogout = () => API.post('/user/logout');
 
+export const postImage = async (params: FormData) => {
+  const { data } = await API.post<string>('/user/image', params);
+  return data;
+};
+
 export const postRequestCreate = (params) => API.post('/post', params);
 export const putRequestUpdate = (params) => API.put('/post', params);
 export const deleteRequesDelete = (id: string) => API.delete(`/post/${id}`);

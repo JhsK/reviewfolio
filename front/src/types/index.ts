@@ -15,6 +15,7 @@ export interface JoinInput extends FormInput {
   job: string;
   // position: 'student' | 'programmer';
   position: string;
+  image?: string;
 }
 
 export interface LoginInput {
