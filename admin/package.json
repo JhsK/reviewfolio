@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "forest-express-sequelize": "^8.5.3"
+  }
+}
