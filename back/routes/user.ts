@@ -43,6 +43,7 @@ router.get('/', isLoggedIn, async (req, res) => {
     user.career = programmerData?.career;
     user.programmerId = programmerData?.id;
     user.point = programmerData?.point;
+    user.checked = programmerData?.checked;
   }
   delete user.password;
   console.log(user);
