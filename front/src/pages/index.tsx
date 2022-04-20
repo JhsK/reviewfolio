@@ -122,7 +122,8 @@ const Home = () => {
                 </Button>
               )}
             </InfoContainer>
-            <img src="./image2-removebg-preview.png" alt="info" />
+            {/* <img src="./image2-removebg-preview.png" alt="info" /> */}
+            <img src="./main.jpeg" alt="info" />
           </div>
         </Container>
       </Layout>
