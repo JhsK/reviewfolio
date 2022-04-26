@@ -262,12 +262,12 @@ const SignUp = () => {
           <div className="article">
             <label htmlFor="job">직무</label>
             <Select id="job" value={selectJob} onChange={onChangeJob} sx={{ width: '40%' }}>
-              <MenuItem value="front">프론트엔드</MenuItem>
-              <MenuItem value="back">백엔드</MenuItem>
-              <MenuItem value="data">데이터분석</MenuItem>
-              <MenuItem value="android">Android</MenuItem>
-              <MenuItem value="ios">IOS</MenuItem>
-              <MenuItem value="devops">DevOps</MenuItem>
+              <MenuItem value="프론트엔드">프론트엔드</MenuItem>
+              <MenuItem value="백엔드">백엔드</MenuItem>
+              <MenuItem value="데이터분석">데이터분석</MenuItem>
+              <MenuItem value="Android">Android</MenuItem>
+              <MenuItem value="Ios">IOS</MenuItem>
+              <MenuItem value="DevOps">DevOps</MenuItem>
             </Select>
           </div>
           {position === 'programmer' && (

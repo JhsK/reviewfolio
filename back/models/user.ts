@@ -51,7 +51,7 @@ User.init(
     },
     job: {
       type: DataTypes.ENUM,
-      values: ['front', 'back', 'data', 'android', 'ios', 'devops'],
+      values: ['프론트엔드', '백엔드', '데이터분석', 'Android', 'Ios', 'DevOps'],
     }
   },
   {

@@ -13,6 +13,8 @@ import { Hr } from 'src/components/style';
 import useAuth from 'src/hooks/useAuth';
 import usePayment from 'src/hooks/usePayment';
 import Swal from 'sweetalert2';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Container = styled.div`
   width: 100%;
@@ -56,6 +58,10 @@ const Home = () => {
   const router = useRouter();
   const currentUser = useAuth();
   usePayment(router.query);
+
+  useEffect(() => {
+    AOS.init({});
+  }, []);
 
   useEffect(() => {
     if (!currentUser.data.checked) {
@@ -123,7 +129,7 @@ const Home = () => {
               )}
             </InfoContainer>
             {/* <img src="./image2-removebg-preview.png" alt="info" /> */}
-            <img src="./main.jpeg" alt="info" />
+            <img data-aos="fade-left" src="./main.jpeg" alt="info" />
           </div>
         </Container>
       </Layout>
