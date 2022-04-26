@@ -53,7 +53,7 @@ const PostContainer = styled.div`
 const FilterContainer = styled.div`
   width: 66%;
   padding-bottom: 0.3rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 1rem;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 
   span {
@@ -82,7 +82,7 @@ const List = () => {
                 <a>
                   <div key={post.id} className="container">
                     <span className="title">{post.title}</span>
-                    <span className="body">{post.body}</span>
+                    <span className="body">{`${post.body.substring(0, 200)}...`}</span>
                     <RequestFormFooter>
                       <span>{`작성자: ${post.User.nickname} - ${post.User.job.toUpperCase()}`}</span>
                       <div className="icon">

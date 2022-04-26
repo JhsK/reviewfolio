@@ -7,6 +7,7 @@ import { isLoggedIn } from './middleware';
 const router = express.Router();
 
 router.post('/calculate', isLoggedIn, async (req, res, next) => {
+  console.log(req.body);
   const encodeedKey = await Buffer.from(`${process.env.TOSS_SECRET_KEY}:`, 'utf8').toString('base64');
   const programmer = await Programmer.findOne({
     where: { UserId: req.user?.id },
@@ -32,8 +33,8 @@ router.post('/calculate', isLoggedIn, async (req, res, next) => {
     const { data: apiResult } = await axios(config);
     await Programmer.update(
       {
-        point: (programmer?.point as number) - req.body.point,
-        refundPoint: req.body.point,
+        point: (programmer?.point as number) - req.body.account,
+        refundPoint: req.body.account,
       },
       {
         where: { UserId: req.user?.id },
