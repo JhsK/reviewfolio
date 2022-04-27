@@ -35,7 +35,13 @@ const InputContainer = styled.form`
   }
 `;
 
-const CommentForm = ({ id, position, activeApplicant }) => {
+interface CommentFormProps {
+  id: string;
+  position: 'student' | 'programmer';
+  activeApplicant: number;
+}
+
+const CommentForm = ({ id, position, activeApplicant }: CommentFormProps) => {
   const [chat, setChat] = useState('');
   const queryClient = useQueryClient();
   const chatMutation = useMutation(postComment);

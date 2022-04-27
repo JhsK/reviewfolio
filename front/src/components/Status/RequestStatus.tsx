@@ -17,7 +17,7 @@ const RequestStatus = () => {
       router.push(`/review/${request.id}`);
     }
   };
-
+  console.log(data);
   return (
     <>
       <TopInfo>

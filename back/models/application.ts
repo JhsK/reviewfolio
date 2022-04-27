@@ -10,6 +10,8 @@ enum ApplicationStatus {
 class Application extends Model {
   public readonly id!: number;
   public status!: ApplicationStatus;
+
+  public RequestPostId?: any;
 }
 
 Application.init(

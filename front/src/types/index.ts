@@ -36,7 +36,7 @@ export interface ICurrentUser extends Model {
   birthday: string;
   job: string;
   nickname: string;
-  position: string;
+  position: 'student' | 'programmer';
   ticket: number;
   point?: number;
   refundPoint?: number;

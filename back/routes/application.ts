@@ -53,6 +53,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
 });
 
 router.put('/', isLoggedIn, async (req, res, next) => {
+  console.log(req.body);
   try {
     const update = await Application.update(
       {
@@ -75,14 +76,11 @@ router.put('/', isLoggedIn, async (req, res, next) => {
       where: { id: application?.id },
     });
 
-    await RequestPost.update(
-      {
-        status: 'end',
-      },
-      {
-        where: { id: requestPost?.id },
-      },
-    );
+    const allApplication = await Application.findAll({
+      where: { RequestPostId: application?.RequestPostId },
+    });
+
+    const endReview = allApplication.filter((review) => review.status === 1);
 
     await Programmer.update(
       {
@@ -92,6 +90,17 @@ router.put('/', isLoggedIn, async (req, res, next) => {
         where: { id: req.body.programmerId },
       },
     );
+
+    if (allApplication.length === endReview.length) {
+      await RequestPost.update(
+        {
+          status: 'end',
+        },
+        {
+          where: { id: requestPost?.id },
+        },
+      );
+    }
 
     return res.json(update);
   } catch (error) {
