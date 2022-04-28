@@ -73,14 +73,14 @@ router.put('/', isLoggedIn, async (req, res, next) => {
     });
 
     const requestPost = await RequestPost.findOne({
-      where: { id: application?.id },
+      where: { id: application?.RequestPostId },
     });
 
     const allApplication = await Application.findAll({
       where: { RequestPostId: application?.RequestPostId },
     });
-
-    const endReview = allApplication.filter((review) => review.status === 1);
+    
+    const endReview = allApplication.filter((review: any) => review.dataValues.status === '리뷰 종료');
 
     await Programmer.update(
       {
