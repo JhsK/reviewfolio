@@ -16,7 +16,6 @@ const ApplicationStatus = () => {
     router.push(`/review/${application.RequestPostId}`);
   };
 
-  console.log(data);
   return (
     <>
       <TopInfo>

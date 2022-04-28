@@ -43,6 +43,7 @@ const ProgrammerReview = () => {
             {
               onSuccess: () => {
                 queryClient.invalidateQueries(['applicant']);
+                queryClient.invalidateQueries('userRequest');
               },
             },
           );
