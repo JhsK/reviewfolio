@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { IoPersonSharp } from 'react-icons/io5';
-import { useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { getPostsList } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
@@ -102,3 +103,15 @@ const List = () => {
 };
 
 export default List;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(['posts'], getPostsList, { staleTime: 1000 });
+
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};

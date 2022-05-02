@@ -36,7 +36,7 @@ export interface ICurrentUser extends Model {
   birthday: string;
   job: string;
   nickname: string;
-  position: 'student' | 'programmer';
+  position: 'student' | 'programmer' | '';
   ticket: number;
   point?: number;
   refundPoint?: number;
@@ -47,7 +47,7 @@ export interface ICurrentUser extends Model {
 export interface IContextUser {
   data: ICurrentUser;
   isAuthenticate: boolean;
-  setData: (param: ICurrentUser) => void;
+  setData: (param: any) => void;
   setLogout: () => void;
 }
 

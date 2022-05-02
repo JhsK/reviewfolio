@@ -37,7 +37,7 @@ const InputContainer = styled.form`
 
 interface CommentFormProps {
   id: string;
-  position: 'student' | 'programmer';
+  position: 'student' | 'programmer' | '';
   activeApplicant: number;
 }
 

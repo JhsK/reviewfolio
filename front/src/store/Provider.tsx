@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ICurrentUser } from 'src/types';
+import { IContextUser } from 'src/types';
 import ContextUser from '.';
 
 const ContextProvider = (props) => {
@@ -20,7 +20,7 @@ const ContextProvider = (props) => {
     }));
   };
 
-  const initialState = {
+  const initialState: IContextUser = {
     data: {
       id: null,
       userId: '',
