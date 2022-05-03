@@ -3,6 +3,7 @@ import { FormControlLabel, MenuItem, Radio, RadioGroup, Select, SelectChangeEven
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { RotatingLines } from 'react-loader-spinner';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { postImage, postSignUp } from 'src/api';
@@ -87,6 +88,13 @@ const Form = styled.form<FormFileProps>`
   }
 `;
 
+const SpinnerContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 const validationMessage = {
   required: '필수 항목입니다',
   passwordConfirmation: '비밀번호가 일치하지 않습니다',
@@ -106,6 +114,7 @@ const SignUp = () => {
   const [selectJob, setSelectJob] = useState('직무를 선택해주세요');
   const [position, setPosition] = useState('student');
   const [imagePath, setImagePath] = useState('');
+  const [loading, setLoading] = useState(false);
   const [isView, setIsView] = useState(true);
 
   const onChangeJob = (e: SelectChangeEvent) => {
@@ -147,6 +156,7 @@ const SignUp = () => {
     if (data.userPassword !== data.rePassword) {
       setError('userPassword', { message: validationMessage.passwordConfirmation }, { shouldFocus: true });
     }
+    setLoading(true);
 
     const values: JoinInput = { ...data, job: selectJob, position, image: imagePath };
 
@@ -154,6 +164,7 @@ const SignUp = () => {
       await postSignUp(values);
       router.replace('/');
     } catch (error) {
+      setLoading(false);
       console.log(error.response);
       console.error(error);
       toast.error(error.response.data, {
@@ -176,6 +187,11 @@ const SignUp = () => {
         <Header />
       </Layout>
       <ToastContainer />
+      {loading && (
+        <SpinnerContainer>
+          <RotatingLines width="200" strokeColor="#6495ED" strokeWidth="1" />
+        </SpinnerContainer>
+      )}
       <BannerContainer>
         <Banner>
           <h1>회원가입</h1>
