@@ -167,6 +167,15 @@ const Info = () => {
             });
             router.reload();
           } catch (error) {
+            toast.error('정산 기간에 주밀 또는 공휴일이 포함되어 있습니다. 1~3일 후 다시 시도해주세요', {
+              position: 'top-right',
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
             console.error(error);
           }
         }

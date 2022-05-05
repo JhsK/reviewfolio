@@ -1,9 +1,8 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import Swal from 'sweetalert2';
-import { getApplicant, getComment, putEndReview } from 'src/api';
+import { useQuery } from 'react-query';
+import { getApplicant, getComment } from 'src/api';
 import useAuth from 'src/hooks/useAuth';
 import { IApplication } from 'src/types';
 import Header from '../Header';
