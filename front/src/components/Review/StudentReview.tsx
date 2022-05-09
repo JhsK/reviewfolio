@@ -1,7 +1,8 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { useQuery } from 'react-query';
+import { QueryClient, useQuery } from 'react-query';
 import { getApplicant, getComment } from 'src/api';
 import useAuth from 'src/hooks/useAuth';
 import { IApplication } from 'src/types';

@@ -1,13 +1,14 @@
 import styled from '@emotion/styled';
 import { Box, Button, Stack } from '@mui/material';
+import { GetServerSideProps, GetStaticPaths } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { IoPersonSharp } from 'react-icons/io5';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { dehydrate, QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { deleteRequesDelete, getPostDetail, postApplication } from 'src/api';
+import { deleteRequesDelete, getPostDetail, getPostsList, postApplication } from 'src/api';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import { FileContainer, RequestFormFooter } from 'src/components/style';
@@ -185,3 +186,18 @@ const RequestDetail = () => {
 };
 
 export default RequestDetail;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(['postDetail', 1], () => getPostDetail(id as string), {
+    staleTime: 1000,
+  });
+
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};

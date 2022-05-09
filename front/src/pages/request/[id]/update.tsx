@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { Box, Button, Stack, TextField } from '@mui/material';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoPersonSharp } from 'react-icons/io5';
-import { useQuery } from 'react-query';
+import { dehydrate, QueryClient, useQuery } from 'react-query';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getPostDetail, putRequestUpdate } from 'src/api';
@@ -164,3 +165,18 @@ const RequestUpdate = () => {
 };
 
 export default RequestUpdate;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { id } = context.params;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery(['update', id], () => getPostDetail(id as string), {
+    staleTime: 1000,
+  });
+
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};
