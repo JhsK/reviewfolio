@@ -46,6 +46,10 @@ export const getComment = async (id: string, applicationId: number) => {
   const { data } = await API.get<IComment[]>(`/comment?postId=${id}&applicationId=${applicationId}`);
   return data;
 };
+export const postCommentFileUpload = async (params: FormData) => {
+  const { data } = await API.post<string[]>('/comment/file', params);
+  return data;
+};
 
 export const putEndReview = (params) => API.put('/application', params);
 

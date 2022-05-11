@@ -1,10 +1,12 @@
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import Swal from 'sweetalert2';
 import { getApplicant, getComment, putEndReview } from 'src/api';
 import useAuth from 'src/hooks/useAuth';
+import { IComment } from 'src/types';
+import Link from 'next/link';
 import Header from '../Header';
 import Layout from '../Layout';
 import CommentForm from './Form';
@@ -24,6 +26,43 @@ const ProgrammerReview = () => {
   const { data: chatList } = useQuery(['chatList', applicant?.id], () => getComment(id as string, applicant?.id), {
     enabled: isSuccess,
   });
+
+  const renderMeContainer = useCallback(
+    (chatData: IComment) => {
+      if (chatData.position === currentUser?.data.position) {
+        if (chatData.content === '') {
+          return (
+            <MeContainer key={chatData.id}>
+              <BubbleRight>
+                <Link href={`http://localhost:3065/${chatData.CommentFiles[0]?.src}`}>
+                  <a target="_blank">
+                    <span className="file">
+                      {`${chatData.CommentFiles[0]?.src} 첨부된 파일입니다. 클릭하여 다운 받으세요`}
+                    </span>
+                  </a>
+                </Link>
+              </BubbleRight>
+            </MeContainer>
+          );
+        }
+        return (
+          <MeContainer key={chatData.id}>
+            <BubbleRight>
+              <span>{chatData.content}</span>
+            </BubbleRight>
+          </MeContainer>
+        );
+      }
+      return (
+        <OtherContainer key={chatData.id}>
+          <BubbleLeft>
+            <span>{chatData.content}</span>
+          </BubbleLeft>
+        </OtherContainer>
+      );
+    },
+    [chatList],
+  );
 
   const onClickReviewEnd = () => {
     Swal.fire({
@@ -55,8 +94,7 @@ const ProgrammerReview = () => {
       }
     });
   };
-
-  console.log(applicant);
+  console.log(chatList);
   return (
     <Layout>
       <Header />
@@ -74,24 +112,7 @@ const ProgrammerReview = () => {
             )}
           </div>
         </TopContainer>
-        {chatList &&
-          chatList.map((chat) =>
-            chat.position === currentUser.data.position ? (
-              <MeContainer key={chat.id}>
-                <BubbleRight>
-                  <span>{chat.content}</span>
-                </BubbleRight>
-              </MeContainer>
-            ) : (
-              <>
-                <OtherContainer key={chat.id}>
-                  <BubbleLeft>
-                    <span>{chat.content}</span>
-                  </BubbleLeft>
-                </OtherContainer>
-              </>
-            ),
-          )}
+        {chatList && chatList.map((chat) => renderMeContainer(chat))}
       </Container>
       {applicant?.status === '리뷰 진행중' && (
         <CommentForm id={id as string} position={currentUser.data.position} activeApplicant={applicant?.id} />

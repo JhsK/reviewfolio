@@ -67,6 +67,20 @@ export const BubbleLeft = styled.div`
     z-index: 999;
   }
 
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+
+  .file {
+    text-decoration: underline;
+
+    &:hover {
+      color: blue;
+      cursor: pointer;
+    }
+  }
+
   &:after {
     border-top: 15px solid #f8f9fb;
     border-left: 15px solid transparent;

@@ -1,5 +1,6 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, HasManyAddAssociationMixin, Model } from 'sequelize';
 import { dbType } from '.';
+import CommentFile from './commentFile';
 import sequelize from './sequelize';
 
 enum EnumPosition {
@@ -10,7 +11,9 @@ enum EnumPosition {
 class Comment extends Model {
   public readonly id!: number;
   public content!: string;
-  public position!: EnumPosition; 
+  public position!: EnumPosition;
+  
+  public addCommentFile!: HasManyAddAssociationMixin<CommentFile, number>;
 }
 
 Comment.init(
@@ -36,6 +39,7 @@ export const associate = (db: dbType) => {
   db.Comment.belongsTo(db.Application);
   db.Comment.belongsTo(db.User);
   db.Comment.belongsTo(db.RequestPost);
+  db.Comment.hasMany(db.CommentFile);
 };
 
 export default Comment;

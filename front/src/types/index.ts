@@ -86,4 +86,5 @@ export interface IComment extends Model {
   ApplicationId?: any;
   UserId: number;
   position: string;
+  CommentFiles: IFile[];
 }
