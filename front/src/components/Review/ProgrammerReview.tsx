@@ -22,15 +22,19 @@ const ProgrammerReview = () => {
   const { data: applicant, isSuccess } = useQuery(['applicant'], () => getApplicant(id as string), {
     select: (data) => data.filter((v) => v.ProgrammerId === currentUser.data?.programmerId)[0],
   });
+  // 리뷰어의 정보를 서버로부터 요청 및 가공
 
   const { data: chatList } = useQuery(['chatList', applicant?.id], () => getComment(id as string, applicant?.id), {
     enabled: isSuccess,
   });
+  // 이전 리뷰 기록 서버로부터 요청
 
   const renderMeContainer = useCallback(
     (chatData: IComment) => {
       if (chatData.position === currentUser?.data.position) {
+        // 리뷰 데이터에 따른 ui 분기처리
         if (chatData.content === '') {
+          // 내가 작성한 리뷰 내용이 파일인 경우
           return (
             <MeContainer key={chatData.id}>
               <BubbleRight>
@@ -45,6 +49,7 @@ const ProgrammerReview = () => {
             </MeContainer>
           );
         }
+        // 내가 작성한 리뷰 내용이 텍스트일 경우
         return (
           <MeContainer key={chatData.id}>
             <BubbleRight>
@@ -53,6 +58,7 @@ const ProgrammerReview = () => {
           </MeContainer>
         );
       }
+      // 상대반이 작성한 내용
       return (
         <OtherContainer key={chatData.id}>
           <BubbleLeft>

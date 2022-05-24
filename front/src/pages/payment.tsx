@@ -78,10 +78,11 @@ const Card = styled.div`
 
 const Payment = () => {
   const currentUser = useAuth();
-  const clientKey = 'test_ck_OyL0qZ4G1VOD5zXnndMroWb2MQYg';
+  const clientKey = 'test_ck_OyL0qZ4G1VOD5zXnndMroWb2MQYg'; // 토스에서 발급받은 키
 
   const onClickTicket = async (amount: number, num: number) => {
     const tossPayments = await loadTossPayments(clientKey);
+    // toss javascript sdk를 이용하여 결제 모듈 요청 및 에러처리
     await tossPayments
       .requestPayment('카드', {
         amount,

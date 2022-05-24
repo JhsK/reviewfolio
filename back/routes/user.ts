@@ -103,6 +103,7 @@ router.post('/', upload.none(), async (req, res, next) => {
       const subMallData = {
         subMallId: `reviewfolio${req.body.userId}`,
         companyName: `reviewfolio${req.body.userId}`,
+        type: 'INDIVIDUAL',
         representativeName: req.body.userName,
         businessNumber: '0000000000',
         account: {

@@ -129,15 +129,16 @@ const Request = () => {
   };
 
   const fileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData();
-    const fileObj = Array.from(e.target.files);
+    const formData = new FormData(); // 파일 업로드를 위해 FormData 객체 생성
+    const fileObj = Array.from(e.target.files); // input onChange 이벤트로 얻은 파일 정보를 배열로 변경
 
     fileObj.forEach((file, i) => formData.append(`files`, file));
-
+    // formData에 fileObj 값을 추가
     try {
       const returnPath = await postFilesUpload(formData);
-      console.log(returnPath);
+      // 업로드할 파일 정보 formData를 api를 통해 서버로 전달
       fileObj.forEach((file) => setFileList((prev) => [...prev, file.name]));
+      // 서버의 응답으로 받은 업로드한 파일의 주소만 메모리에 저장하여 요청글 작성시 다시 서버로 전달
       setFilePath(returnPath);
     } catch (error) {
       console.error(error);

@@ -1674,7 +1674,7 @@
     "stack": {
       "database_type": "mysql",
       "engine": "nodejs",
-      "engine_version": "17.0.1",
+      "engine_version": "16.15.0",
       "orm_version": "5.15.2"
     }
   }
