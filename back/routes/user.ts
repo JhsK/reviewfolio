@@ -207,16 +207,17 @@ router.put('/change-password', isLoggedIn, async (req, res, next) => {
   }
 });
 
-router.put('/change-info', isLoggedIn, async (req, res, next) => {
+router.post('/change-info', isLoggedIn, async (req, res, next) => {
+  const userName = req.body.userName;
+  const job = req.body.job;
   try {
     const user = await User.findOne({
       where: { id: req.user?.id },
     });
-
     const newUser = await User.update(
       {
-        userName: req.body.userName,
-        job: req.body.job,
+        userName,
+        job, // enum이라 문자열이 아닌 정수로 값을 넣어주어야 함
       },
       {
         where: { id: req.user?.id },

@@ -56,6 +56,6 @@ export const putEndReview = (params) => API.put('/application', params);
 export const postBuyTicket = (params) => API.post('/order', params);
 
 export const putChangePassword = (params) => API.put('/user/change-password', params);
-export const putChangeInfo = (params) => API.put('/user/change-info', params);
+export const putChangeInfo = (params) => API.post('/user/change-info', params);
 
 export const postRequestSubMallCalculate = (params) => API.post('/submall/calculate', params);
